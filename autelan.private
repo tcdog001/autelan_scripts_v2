@@ -1,0 +1,35 @@
+#!/bin/bash
+
+. autelan.in
+
+main() {
+	mkdir -p ${hisitopdir}/histb/pub/rootfs_data
+	pushd ${hisitopdir}/sdk_changes
+	
+	cp -f mk/Makefile ${hisitopdir}/histb
+	cp -f mk/base.mak ${hisitopdir}/histb
+	cp -f mk/cfg.mak ${hisitopdir}/histb
+	echo "copy Makefile ok"
+
+	cp -fpR sample/i2c/* ${hisitopdir}/histb/sample/i2c/
+	cp -fpR sample/3g/* ${hisitopdir}/histb/sample/3g/
+	echo "copy sample ok"
+
+	cp -fpR boot/* ${hisitopdir}/histb/source/boot/	
+	echo "copy boot ok"
+
+	cp -f package/top/Makefile ${hisitopdir}/histb/source/rootfs/top/
+	cp -f rootfs/e2fsprogs/Makefile ${hisitopdir}/histb/source/rootfs/e2fsprogs/
+	echo "copy rootfs: top e2fsprogs ok"
+
+	cp -f kernel/linux-3.10.y/autelan.config ${hisitopdir}/histb/source/kernel/linux-3.10.y/
+	cp -f kernel/linux-3.10.y/autelan.config ${hisitopdir}/histb/source/kernel/linux-3.10.y/.config
+	echo "copy kernel: config ok"
+
+
+	cp -f kernel/linux-3.10.y/drivers/usb/serial/option.c ${hisitopdir}/histb/source/kernel/linux-3.10.y/drivers/usb/serial/
+
+}
+
+main "$@"
+

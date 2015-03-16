@@ -1,0 +1,115 @@
+#!/bin/bash
+
+if [ "" == "$1" ]; then
+	. autelan.in
+else
+	hisitopdir=$1
+fi
+
+pushd ${hisitopdir}/custom/etc/utils/
+. utils.in
+popd
+
+dir_base=${hisitopdir}/lte-fi
+dir_md=${dir_base}/mdboard
+dir_ws=${dir_base}/website
+dir_pub=${hisitopdir}/histb/pub
+dir_rootfs=${dir_pub}/rootbox
+install_dir_rootfs_data=${dir_pub}/rootfs_data
+dir_image=${dir_pub}/image
+install_dir_website=${hisitopdir}/website/website
+install_dir_website_config=${hisitopdir}/website/website_config
+version=$(cat ${hisitopdir}/custom/etc/.version)
+ws_version=$(cat ${install_dir_website}/ver.info)
+
+usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
+fs_list="rootfs_200M.ext4 rootfs_data_3000M.ext4"
+
+#
+#$1:dir
+#
+rootfs_chmod() {
+	local dir=$1
+
+	chmod 600 ${dir}/rootfs/etc/ssh/ssh_host_rsa_key
+	chmod 440 ${dir}/rootfs/etc/sudoers
+	chmod 755 ${dir}/rootfs/usr/local/sudo/libexec/sudoers.so
+	chmod u+s ${dir}/rootfs/sbin/sudo
+}
+
+#
+#$1:dir
+#
+copy_to_local() {
+	local dir=$1
+	local info
+
+	info="install version:${version} from ${dir_rootfs} to ${dir}"
+	echo "${info}..."
+
+	chown -R $(whoami):$(whoami) ${dir}
+	rm -fr ${dir}
+
+	mkdir -p ${dir}/rootfs ${dir}/rootfs_data
+	echo "#### cp -fpR ${dir_rootfs}/* ${dir}/rootfs ####"
+	cp -fpR ${dir_rootfs}/* ${dir}/rootfs
+	
+	chown -R root:root ${dir}/rootfs
+	echo "#### cp -fpR ${install_dir_rootfs_data}/* ${dir}/rootfs_data #####"
+	cp -fpR ${install_dir_rootfs_data}/* ${dir}/rootfs_data
+	chown -R root:root ${dir}/rootfs_data
+	
+	#modify the file permissions
+	rootfs_chmod ${dir}	
+	
+	pushd ${dir}/rootfs/dev
+	mknod console c 5 1
+	mknod ttyAMA0 c 204 64
+	mknod ttyAMA1 c 204 65
+	mknod ttyS000 c 204 64
+	popd
+	
+	echo "OK:${info}"
+	echo; sleep 1
+
+	for file in ${fs_list} ${usb_list}; do
+		cp -f ${dir_image}/${file} ${dir}
+		chown -R root:root ${dir}/${file}
+	done
+}
+
+#
+#$1:src
+#$1:dst
+#
+copy_to_local_ws() {
+	local src=$1
+	local dst=$2
+	local info
+
+	info="install website version:${ws_version} from ${src} to ${dst}"
+        echo "${info}..."
+
+	chown -R $(whoami):$(whoami) ${dir_ws}
+        rm -fr ${dst}
+
+        mkdir -p ${dst}
+
+	echo "#### cp -fpR ${src}/* ${dst} ####"
+        cp -fpR ${src}/* ${dst}
+        chown -R root:root ${dst}
+
+        echo "OK:${info}"
+        echo; sleep 1
+}
+
+main() {
+	copy_to_local ${dir_md}/${version}
+	copy_to_local ${dir_md}/trunk
+	
+	copy_to_local_ws ${install_dir_website} ${dir_ws}/${ws_version}
+	copy_to_local_ws ${install_dir_website} ${dir_ws}/trunk
+	copy_to_local_ws ${install_dir_website_config} ${dir_ws}/website_config
+}
+
+main "$@"

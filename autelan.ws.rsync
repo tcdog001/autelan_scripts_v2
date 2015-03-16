@@ -1,0 +1,87 @@
+#!/bin/bash
+
+. autelan.in
+pushd ${hisitopdir}/custom/etc/utils/
+. utils.in
+popd
+rsync_script=./rsync.sh
+ssh_script=./ssh.sh
+
+src_dir_website=${hisitopdir}/website/website
+ws_version=$(cat ${src_dir_website}/ver.info)
+
+rsync_config=${hisitopdir}/autelan_scripts/.rsync.conf
+
+#
+#$1:localbasedir
+#$2:ip
+#$3:basedir
+#$4:version
+#$5:user
+#$6:pass
+#
+rsync_to_remote_ws() {
+        local localbasedir=$1
+        local ip=$2
+        local basedir=$3
+        local version=$4
+        local user=$5
+        local pass=$6
+        local src_dir=${localbasedir}/${version}
+        local dir=${basedir}/${version}
+        local trunk=${basedir}/trunk
+	local src_dir_config=${localbasedir}/website_config
+	local dst_dir_config=${basedir}/website_config
+        local info="rsync version:${version} from ${localbasedir} to ${ip}:${trunk}"
+        local param="--ignore-times"
+        local cmd
+
+        #
+        # create trunk/config
+        #
+        cmd="mkdir -p ${trunk} ${dst_dir_config}"
+        sudo ${ssh_script} "${ip}" "${user}" "${pass}" "${cmd}"
+
+        #
+        # rsync local version to ${ip}:${trunk}
+        #
+        sudo ${rsync_script} "${src_dir}" "${ip}:${trunk}" "${user}" "${pass}" ${param}
+
+        #
+        # rsync website config
+        #
+        sudo ${rsync_script} "${src_dir_config}" "${ip}:${dst_dir_config}" "${user}" "${pass}" ${param}
+
+        #
+        # copy trunk to version on cloud
+        #
+        cmd="rm -fr ${dir}"
+        cmd="${cmd} && mkdir -p ${dir}"
+        cmd="${cmd} && cp -fpR ${trunk}/* ${dir}"
+        sudo ${ssh_script} "${ip}" "${user}" "${pass}" "${cmd}"
+        echo; sleep 1
+}
+
+main() {
+	local version="$1"; version=${version:-${ws_version}}
+	local -A hash=( \
+		[182.254.198.168]=ltefi@Autelan1 \
+		[192.168.15.112]=AutelanE830 \
+	)
+	local ip
+	local pass
+	for ip in ${!hash[*]}; do
+		pass=${hash[${ip}]}
+
+		rsync_to_remote_ws \
+			${hisitopdir}/website \
+			${ip} \
+			/opt/version/lte-fi/website \
+			${version} \
+			root \
+			${pass} \
+			# end of rsync_to_remote_ws
+	done
+}
+
+main "$@"

@@ -1,0 +1,218 @@
+#!/bin/bash
+
+if [ -n "${__HISI_AUTELAN_IN__}" ]; then
+	return
+else
+	__HISI_AUTELAN_IN__="$0"
+fi
+
+if [ -n "${AUTELAN_DIR}" ]; then
+	. ${AUTELAN_DIR}/autelan.env
+else
+	. autelan.env
+fi
+
+
+#
+# copy from openwrt rule.mk
+#
+#CP:=cp -fpR
+#LN:=ln -sf
+#XARGS:=xargs -r
+#SED:=sed -i -e
+#INSTALL_BIN:=install -m0755
+#INSTALL_DIR:=install -d -m0755
+#INSTALL_DATA:=install -m0644
+#INSTALL_CONF:=install -m0600
+
+CP_FILE() {
+        cp -f $@
+        echo "cp -f $@"
+}
+
+CP_DIR() {
+        cp -fpR $@
+        echo "cp -fpR $@"
+}
+
+CP() {
+	cp -fpR $@
+	echo "cp -fpR $@"
+}
+
+LN() {
+	ln -sf $@
+	echo "ln -sf $@"
+}
+
+RM() {
+	rm -fr $@
+	echo "rm -fr $@"
+}
+
+XARGS() {
+	xargs -r $@
+}
+
+SED() {
+	sed -i -e $@
+}
+
+INSTALL_BIN() {
+	install -m0755 $@
+	echo "install -m0755 $@"
+}
+
+INSTALL_DIR() {
+	install -d -m0755 $@
+	echo "install -d -m0755 $@"
+}
+
+INSTALL_DATA() {
+	install -m0644 $@
+	echo "install -m0644 $@"
+}
+
+
+INSTALL_CONF() {
+        install -m0644 $@
+	echo "install -m0644 $@"
+}
+
+#
+#$1:server
+#$2:user
+#$3:pass
+#$4:dir_local
+#$5:dir_remote
+#$6:file
+#
+ftpget() {
+	local server=$1
+	local user=$2
+	local pass=$3
+	local dir_local=$4
+	local dir_remote=$5
+	local file=$6
+	local err=0;
+	local tag="OK"
+
+	mkdir -p $(dirname ${dir_local}/${file})
+
+	busybox ftpget -u ${user} -p ${pass} ${server} \
+		${dir_local}/${file} ${dir_remote}/${file}; err=$?
+	if [ "0" != "${err}" ]; then
+		tag="ERROR[${err}]"
+	fi
+
+	echo "${tag}: ftpget ${dir_local}/${file} from ${server}:${dir_remote}/${file}"
+
+	return ${err}
+}
+
+#
+#$1:server
+#$2:user
+#$3:pass
+#$4:dir_local
+#$5:dir_remote
+#$6:file
+#
+ftpput() {
+        local server=$1
+        local user=$2
+        local pass=$3
+        local dir_local=$4
+        local dir_remote=$5
+        local file=$6
+        local err=0;
+        local tag="OK"
+
+        mkdir -p $(dirname ${dir_local}/${file})
+
+        busybox ftpput -u ${user} -p ${pass} ${server} \
+                ${dir_remote}/${file} ${dir_local}/${file}; err=$?
+        if [ "0" != "${err}" ]; then
+                tag="ERROR[${err}]"
+        fi
+
+        echo "${tag}: ftpput ${dir_local}/${file} to ${server}:${dir_remote}/${file}"
+
+        return ${err}
+}
+
+liujf_ip() {
+	cat ${hisitopdir}/autelan/.liujf.ip
+}
+
+#
+#$1:dir_local
+#$2:dir_remote
+#$3:file
+#
+ftpget_byliujf() {
+        local dir_local=$1
+        local dir_remote=$2
+        local file=$3
+
+	ftpget $(liujf_ip) liujf ljfljfljf ${dir_local} ${dir_remote} ${file}
+}
+
+#
+#$1:dir_local
+#$2:dir_remote
+#$3:file
+#
+ftpput_byliujf() {
+        local dir_local=$1
+        local dir_remote=$2
+        local file=$3
+
+        ftpput $(liujf_ip) liujf ljfljfljf ${dir_local} ${dir_remote} ${file}
+}
+
+#
+# $1:package path
+#
+package_prepare() {
+	local path=$1
+
+	if [ -d "${path}/autelan" ]; then
+		echo "Copy Changed Files ..."
+		CP ${path}/autelan/* ${path}
+		echo "Copy Changed Files end"
+	fi
+}
+
+#
+# $1:package path
+#
+package_compile() {
+	local path=$1
+
+	echo "Make ..."
+	make -C ${path}
+	echo "Make end"
+}
+
+#
+# $1:package path
+#
+package_install() {
+	local path=$1
+
+	echo "Make install ..."
+	make -C ${path} install
+	echo "Make install end"
+}
+
+#
+# $1:package path
+#
+package_common() {
+	package_prepare $1
+	package_compile $1
+	package_install $1
+}
+
+

@@ -1,0 +1,63 @@
+#!/bin/bash
+
+. autelan.in
+dir_base=${hisitopdir}/lte-fi
+dir_md=${dir_base}/mdboard
+dir_ws=${dir_base}/website
+
+usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
+fs_list="rootfs_200M.ext4 rootfs_data_3000M.ext4"
+
+#
+#$1:md_version
+#$2:ws_version
+#
+make_usb() {
+	local md_version=$1
+	local ws_version=$2
+	local usbfile=usb.upgrade-${md_version}.tar.gz
+	local info="make ${usbfile}"
+	local file
+
+	echo "${info}..."
+	sudo rm -fr ${dir_md}/upgrade/*
+	mkdir -p ${dir_md}/upgrade/website
+	sudo cp -fpR ${dir_md}/${md_version}/* ${dir_md}/upgrade
+	cp -fpR ${dir_ws}/${ws_version}/* ${dir_md}/upgrade/website
+
+	pushd ${dir_md}/upgrade > /dev/null
+	sudo rm -f ${fs_list}
+	cp -fp ${hisitopdir}/histb/pub/rootfs/usr/sbin/usbub.sh .
+	cp -fp ${hisitopdir}/histb/pub/rootfs/etc/upgrade/usbupgrade .
+	for file in ${usb_list}; do
+		ln -sf rootfs/image/${file} ${file}
+	done
+	popd > /dev/null
+	
+	pushd ${dir_md} > /dev/null
+	sudo rm -f ${usbfile}
+	sudo tar zcvf ${usbfile} upgrade/
+        popd > /dev/null
+	echo "OK: ${info}"
+}
+
+#
+#$1:md_version
+#$2:ws_version
+#
+main() {
+	local md_version=$1
+	local ws_version=$2
+
+	if [ -z "${md_version}" ]; then
+		md_version=$(cat ${hisitopdir}/custom/etc/.version)
+	fi
+
+	if [ -z "${ws_version}" ]; then
+                ws_version=$(cat ${hisitopdir}/website/website/ver.info)
+        fi
+
+	make_usb ${md_version} ${ws_version}
+}
+
+main "$@"

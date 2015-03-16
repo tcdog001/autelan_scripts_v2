@@ -1,0 +1,104 @@
+#!/bin/bash
+
+. autelan.in
+. ${hisitopdir}/custom/etc/utils/utils.in
+
+#
+#$1:version
+#
+ap_make() {
+	local version=$1
+        local info="make ap version:${version}"
+        local err=0;
+
+        echo "${info} ..."
+
+        pushd ../trunk_project/trunk
+	./make_71xx.sh ${hisitopdir}; err=$?
+	popd
+	if [ "0" == "${err}" ]; then
+		echo "OK:${info}"
+	else
+		echo "ERROR[${err}]:${info}"
+		exit 1
+	fi
+
+	return ${err}
+}
+
+#
+#$1:version
+#
+md_make() {
+	local version=$1
+        local info="make md version:${version}"
+        local err=0;
+
+        echo "${info} ..."
+        ./autelan.private
+
+	pushd ../histb
+	make build; err=$?
+	popd
+        if [ "0" == "${err}" ]; then
+                echo "OK:${info}"
+        else
+                echo "ERROR[${err}]:${info}"
+        fi
+
+        return ${err}
+}
+
+
+#
+#$1:version
+#
+save_version() {
+        local version=$1
+
+        echo ${version} > ${hisitopdir}/version
+        echo ${version} > ${hisitopdir}/custom/etc/.version
+        echo ${version} > ${hisitopdir}/custom/etc/.buddy_version
+}
+
+#
+#$1:version
+#
+do_make() {
+        local version=$1
+        local err=0;
+
+        save_version ${version}
+
+	ap_make ${version} || {
+		return 1
+	}
+
+        md_make ${version} || {
+		return 1
+	}
+
+	${hisitopdir}/autelan_scripts/autelan.install ${hisitopdir} || {
+		return 1
+	}
+}
+
+file_make_lock=/tmp/.make_lock
+
+#
+#$1:version
+#
+main() {
+        local version=$1
+
+        version_check ${version} || {
+                echo "bad version:${version}"
+                return 1
+        }
+
+        exec_with_flock ${file_make_lock} do_make ${version}
+	rm -f ${hisitopdir}/version
+}
+
+main "$@"
+

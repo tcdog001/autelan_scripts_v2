@@ -1,0 +1,38 @@
+#!/bin/bash
+
+. autelan.in
+
+do_install() {
+	rm -f ${hisirootfs}/etc/resolv.conf
+        echo "======================================="
+        echo "rm -f ${hisirootfs}/etc/resolv.conf"
+        echo "======================================="
+
+	rm -fr ${hisirootfs}/opt
+	rm -f ${hisirootfs}/usr/bin/du
+	CP ../release/* ${hisirootfs}
+	CP ../custom/* ${hisirootfs}
+
+	rm -fr ${hisitopdir}/histb/pub/rootfs_data/*
+	CP ../rootfs_data/* ${hisitopdir}/histb/pub/rootfs_data
+
+	pushd ${hisirootfs}/bin
+	rm -f sh; ln -sf bash sh
+	popd
+}
+
+main() {
+	local action=$1
+
+	case "${action}" in
+"install")
+	do_install
+	;;
+*)
+	echo "warning: only support $0 install!"
+	;;
+	esac
+}
+
+main $@
+

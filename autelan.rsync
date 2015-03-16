@@ -1,0 +1,90 @@
+#!/bin/bash
+
+. autelan.in
+pushd ${hisitopdir}/custom/etc/utils/
+. utils.in
+popd
+rsync_script=./rsync.sh
+ssh_script=./ssh.sh
+
+version=$(cat ${hisitopdir}/custom/etc/.version)
+
+usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
+fs_list="rootfs_200M.ext4 rootfs_data_3000M.ext4"
+
+rsync_config=${hisitopdir}/autelan_scripts/.rsync.conf
+
+#
+#$1:localbasedir
+#$2:ip
+#$3:basedir
+#$4:version
+#$5:user
+#$6:pass
+#
+rsync_to_remote() {
+        local localbasedir=$1
+	local ip=$2
+	local basedir=$3
+        local version=$4
+	local user=$5
+	local pass=$6
+        local src_dir=${localbasedir}/${version}
+        local dir=${basedir}/${version}
+        local trunk=${basedir}/trunk
+        local info="rsync version:${version} from ${localbasedir} to ${ip}:${trunk}"
+	local param="--ignore-times"
+	local file
+        local cmd
+
+        #
+        # create trunk
+        #
+        cmd="mkdir -p ${trunk}/rootfs"
+        sudo ${ssh_script} "${ip}" "${user}" "${pass}" "${cmd}"
+
+	echo "${info}..."
+        #
+        # rsync local version to ${ip}:${trunk}
+        #
+        sudo ${rsync_script} "${src_dir}/rootfs" "${ip}:${trunk}/rootfs" "${user}" "${pass}" ${param}
+        for file in ${fs_list}; do
+                sudo ${rsync_script} "${src_dir}/${file}" "${ip}:${trunk}/${file}" "${user}" "${pass}" ${param}
+        done
+	for file in ${usb_list}; do
+		cmd="cp -fp ${trunk}/rootfs/image/${file} ${trunk}"
+		sudo ${ssh_script} "${ip}" "${user}" "${pass}" "${cmd}"
+	done
+	sudo ${ssh_script} "${ip}" "${user}" "${pass}" "find ${trunk} | xargs touch"
+
+        #
+        # copy trunk to version on cloud
+        #
+        cmd="rm -fr ${dir}"
+        cmd="${cmd} && mkdir -p ${dir}/rootfs"
+        cmd="${cmd} && cp -fpR ${trunk}/* ${dir}"
+        sudo ${ssh_script} "${ip}" "${user}" "${pass}" "${cmd}"
+        echo; sleep 1
+}
+
+main() {
+	local local_base=${hisitopdir}/lte-fi
+	local local_md=${local_base}/mdboard
+	local dir_base=/opt/version/lte-fi
+	local dir_md=${dir_base}/mdboard
+
+	local -A hash=( \
+		[182.254.198.168]=ltefi@Autelan1 \
+#		[192.168.15.26]=AutelanE830 \
+		[192.168.15.112]=AutelanE830 \
+	)
+	local ip
+	local pass
+	for ip in ${!hash[*]}; do
+		pass=${hash[${ip}]}
+
+		rsync_to_remote		${local_md}	${ip} ${dir_md}	${version} 	root ${pass}
+	done
+}
+
+main "$@"
