@@ -12,7 +12,7 @@ version=$(cat ${hisitopdir}/custom_v2/etc/.version)
 usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
 fs_list="rootfs_200M.ext4 rootfs_data_3000M.ext4"
 
-rsync_config=${hisitopdir}/autelan_scripts/.rsync.conf
+rsync_config=${hisitopdir}/autelan_scripts_v2/.rsync.conf
 
 #
 #$1:localbasedir

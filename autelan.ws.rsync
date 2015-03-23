@@ -10,7 +10,7 @@ ssh_script=./ssh.sh
 src_dir_website=${hisitopdir}/website/website
 ws_version=$(cat ${src_dir_website}/ver.info)
 
-rsync_config=${hisitopdir}/autelan_scripts/.rsync.conf
+rsync_config=${hisitopdir}/autelan_scripts_v2/.rsync.conf
 
 #
 #$1:localbasedir

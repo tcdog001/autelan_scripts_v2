@@ -78,7 +78,7 @@ do_make() {
 		return 1
 	}
 
-	${hisitopdir}/autelan_scripts/autelan.install ${hisitopdir} || {
+	${hisitopdir}/autelan_scripts_v2/autelan.install ${hisitopdir} || {
 		return 1
 	}
 }
