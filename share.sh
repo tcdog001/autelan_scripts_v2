@@ -2,7 +2,7 @@
 
 md_install() {
 	local src=../share
-	local dst=../custom
+	local dst=../custom_v2
 	
 	rm -fr ${dst}/etc/jsock/*
 	rm -fr ${dst}/etc/utils/*
@@ -15,7 +15,7 @@ md_install() {
 }
 
 ap_install() {
-	local src=../custom
+	local src=../custom_v2
 	local dst=../trunk_project/trunk/package/autelan-shell/src/jsock/etc/
  
 	rm -fr ${dst}/jsock/*

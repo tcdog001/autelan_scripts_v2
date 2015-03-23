@@ -11,7 +11,7 @@ do_install() {
 	rm -fr ${hisirootfs}/opt
 	rm -f ${hisirootfs}/usr/bin/du
 	CP ../release/* ${hisirootfs}
-	CP ../custom/* ${hisirootfs}
+	CP ../custom_v2/* ${hisirootfs}
 
 	rm -fr ${hisitopdir}/histb/pub/rootfs_data/*
 	CP ../rootfs_data/* ${hisitopdir}/histb/pub/rootfs_data
