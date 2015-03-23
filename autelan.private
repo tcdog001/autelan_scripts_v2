@@ -4,7 +4,7 @@
 
 main() {
 	mkdir -p ${hisitopdir}/histb/pub/rootfs_data
-	pushd ${hisitopdir}/sdk_changes
+	pushd ${hisitopdir}/sdk_changes_v2
 	
 	cp -f mk/Makefile ${hisitopdir}/histb
 	cp -f mk/base.mak ${hisitopdir}/histb
