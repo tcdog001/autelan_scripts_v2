@@ -13,11 +13,15 @@ main() {
 
 	cp -fpR sample/i2c/* ${hisitopdir}/histb/sample/i2c/
 	cp -fpR sample/3g/* ${hisitopdir}/histb/sample/3g/
+	cp -fpR sample/pmoc/* ${hisitopdir}/histb/sample/pmoc/
 	echo "copy sample ok"
 
 	cp -fpR boot/* ${hisitopdir}/histb/source/boot/	
 	echo "copy boot ok"
 
+	cp -fpR msp/* ${hisitopdir}/histb/source/msp/	
+	echo "copy msp ok"
+	
 	cp -f package/top/Makefile ${hisitopdir}/histb/source/rootfs/top/
 	cp -f rootfs/e2fsprogs/Makefile ${hisitopdir}/histb/source/rootfs/e2fsprogs/
 	echo "copy rootfs: top e2fsprogs ok"
