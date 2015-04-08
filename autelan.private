@@ -10,6 +10,9 @@ main() {
 	cp -f mk/base.mak ${hisitopdir}/histb
 	cp -f mk/cfg.mak ${hisitopdir}/histb
 	echo "copy Makefile ok"
+	
+	cp -f scripts/* ${hisitopdir}/histb/scripts/
+	echo "copy scripts ok"
 
 	cp -fpR sample/i2c/* ${hisitopdir}/histb/sample/i2c/
 	cp -fpR sample/3g/* ${hisitopdir}/histb/sample/3g/
