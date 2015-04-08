@@ -6,7 +6,7 @@ else
 	hisitopdir=$1
 fi
 
-pushd ${hisitopdir}/custom_v2/etc/utils/
+pushd ${hisitopdir}/custom/etc/utils/
 . utils.in
 popd
 
@@ -19,7 +19,7 @@ install_dir_rootfs_data=${dir_pub}/rootfs_data
 dir_image=${dir_pub}/image
 install_dir_website=${hisitopdir}/website/website
 install_dir_website_config=${hisitopdir}/website/website_config
-version=$(cat ${hisitopdir}/custom_v2/etc/.version)
+version=$(cat ${hisitopdir}/custom/etc/.version)
 ws_version=$(cat ${install_dir_website}/ver.info)
 
 usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"

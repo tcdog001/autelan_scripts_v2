@@ -50,7 +50,7 @@ main() {
 	local ws_version=$2
 
 	if [ -z "${md_version}" ]; then
-		md_version=$(cat ${hisitopdir}/custom_v2/etc/.version)
+		md_version=$(cat ${hisitopdir}/custom/etc/.version)
 	fi
 
 	if [ -z "${ws_version}" ]; then

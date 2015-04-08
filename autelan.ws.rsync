@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . autelan.in
-pushd ${hisitopdir}/custom_v2/etc/utils/
+pushd ${hisitopdir}/custom/etc/utils/
 . utils.in
 popd
 rsync_script=./rsync.sh
@@ -10,7 +10,7 @@ ssh_script=./ssh.sh
 src_dir_website=${hisitopdir}/website/website
 ws_version=$(cat ${src_dir_website}/ver.info)
 
-rsync_config=${hisitopdir}/autelan_scripts_v2/.rsync.conf
+rsync_config=${hisitopdir}/autelan_scripts/.rsync.conf
 
 #
 #$1:localbasedir

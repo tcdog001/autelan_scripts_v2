@@ -1,18 +1,18 @@
 #!/bin/bash
 
 . autelan.in
-pushd ${hisitopdir}/custom_v2/etc/utils/
+pushd ${hisitopdir}/custom/etc/utils/
 . utils.in
 popd
 rsync_script=./rsync.sh
 ssh_script=./ssh.sh
 
-version=$(cat ${hisitopdir}/custom_v2/etc/.version)
+version=$(cat ${hisitopdir}/custom/etc/.version)
 
 usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
 fs_list="rootfs_200M.ext4 rootfs_data_3000M.ext4"
 
-rsync_config=${hisitopdir}/autelan_scripts_v2/.rsync.conf
+rsync_config=${hisitopdir}/autelan_scripts/.rsync.conf
 
 #
 #$1:localbasedir
