@@ -141,8 +141,20 @@ ftpput() {
         return ${err}
 }
 
-liujf_ip() {
-	cat ${hisitopdir}/autelan/.liujf.ip
+#
+#$1:dir_local
+#$2:dir_remote
+#$3:file
+#
+ftpget_byuser() {
+        local dir_local=$1
+        local dir_remote=$2
+        local file=$3
+
+	local ip user pass
+	read ip user pass < .user
+
+	ftpget ${ip} ${user} ${pass} ${dir_local} ${dir_remote} ${file}
 }
 
 #
@@ -150,25 +162,15 @@ liujf_ip() {
 #$2:dir_remote
 #$3:file
 #
-ftpget_byliujf() {
+ftpput_byuser() {
         local dir_local=$1
         local dir_remote=$2
         local file=$3
 
-	ftpget $(liujf_ip) liujf ljfljfljf ${dir_local} ${dir_remote} ${file}
-}
+	local ip user pass
+	read ip user pass < .user
 
-#
-#$1:dir_local
-#$2:dir_remote
-#$3:file
-#
-ftpput_byliujf() {
-        local dir_local=$1
-        local dir_remote=$2
-        local file=$3
-
-        ftpput $(liujf_ip) liujf ljfljfljf ${dir_local} ${dir_remote} ${file}
+        ftpput ${ip} ${user} ${pass} ${dir_local} ${dir_remote} ${file}
 }
 
 #
@@ -215,4 +217,26 @@ package_common() {
 	package_install $1
 }
 
+
+autelan_git_pull() {
+	local dir_autelan=${hisitopdir}/sdk_changes/rootfs/autelan
+
+	if [[ ! -d ${dir_autelan} ]]; then
+		git clone https://github.com/ljf10000/bigap ${dir_autelan}
+	fi
+
+	pushd ${dir_autelan}
+        git pull
+        echo "git clone to ${dir_autelan}"
+        popd
+}
+
+install_autelan() {
+        local dst="$1"
+        local dir_autelan=${hisitopdir}/sdk_changes/rootfs/autelan
+
+        rm -fr ${dst}/*
+        mkdir -p ${dst}
+        cp -fpR ${dir_autelan}/* ${dst}/
+}
 

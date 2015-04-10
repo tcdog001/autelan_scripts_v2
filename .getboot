@@ -1,0 +1,36 @@
+#!/bin/bash
+
+. autelan.in
+
+dir_sdk_changes=${hisitopdir}/sdk_changes
+
+bootfilelist=" \
+	fastboot/common/env_common.c \
+	fastboot/common/env_embedded.c \
+	fastboot/common/cmd_bootm.c \
+	fastboot/common/cmd_mem.c \
+	fastboot/common/cmd_mmc.c \
+	fastboot/tools/envcrc.c \
+	fastboot/include/environment.h \
+	fastboot/drivers/mmc/mmc.c \
+	"
+
+get_boot_files() {
+	local list="$*"
+	local dir_ftp=his3718/fastboot/boot-liujf
+	local dir_local=${dir_sdk_changes}/boot
+	local file
+
+	for file in ${list}; do
+		ftpget_byuser ${dir_local} ${dir_ftp} ${file}
+	done
+}
+
+main() {
+	get_boot_files ${bootfilelist}
+
+	./autelan.private
+}
+
+main "$@"
+

@@ -2,40 +2,78 @@
 
 . autelan.in
 
-main() {
-	mkdir -p ${hisitopdir}/histb/pub/rootfs_data
-	pushd ${hisitopdir}/sdk_changes
-	
-	cp -f mk/Makefile ${hisitopdir}/histb
-	cp -f mk/base.mak ${hisitopdir}/histb
-	cp -f mk/cfg.mak ${hisitopdir}/histb
+dir_histb=${hisitopdir}/histb
+dir_sdk_changes=${hisitopdir}/sdk_changes
+
+install_makefile() {
+	mkdir -p ${dir_histb}/pub/rootfs_{data,config}
+
+	cp -fpR ${dir_sdk_changes}/mk/* ${dir_histb}/
+
 	echo "copy Makefile ok"
-	
-	cp -f scripts/* ${hisitopdir}/histb/scripts/
-	echo "copy scripts ok"
+}
 
-	cp -fpR sample/i2c/* ${hisitopdir}/histb/sample/i2c/
-	cp -fpR sample/3g/* ${hisitopdir}/histb/sample/3g/
-	cp -fpR sample/pmoc/* ${hisitopdir}/histb/sample/pmoc/
-	echo "copy sample ok"
+install_boot() {
+        local dir_autelan=${dir_histb}/source/boot/fastboot/common/autelan
 
-	cp -fpR boot/* ${hisitopdir}/histb/source/boot/	
+	cp -fpR ${dir_sdk_changes}/boot/* ${dir_histb}/source/boot/
+
+	mkdir -p ${dir_autelan}
+        install_autelan ${dir_autelan}
+
 	echo "copy boot ok"
+}
 
-	cp -fpR msp/* ${hisitopdir}/histb/source/msp/	
-	echo "copy msp ok"
-	
-	cp -f package/top/Makefile ${hisitopdir}/histb/source/rootfs/top/
-	cp -f rootfs/e2fsprogs/Makefile ${hisitopdir}/histb/source/rootfs/e2fsprogs/
-	echo "copy rootfs: top e2fsprogs ok"
+install_kernel() {
+	local dir_src=${dir_sdk_changes}/kernel/linux-3.10.y
+	local dir_dst=${dir_histb}/source/kernel/linux-3.10.y
 
-	cp -f kernel/linux-3.10.y/autelan.config ${hisitopdir}/histb/source/kernel/linux-3.10.y/
-	cp -f kernel/linux-3.10.y/autelan.config ${hisitopdir}/histb/source/kernel/linux-3.10.y/.config
+	cp -f ${dir_src}/autelan.config ${dir_dst}/
+	cp -f ${dir_src}/autelan.config ${dir_dst}/.config
+
 	echo "copy kernel: config ok"
+}
 
+install_busybox() {
+	local dir_busybox_base=${dir_histb}/source/rootfs/busybox/gcc4.4
+        local dir_busybox=${dir_busybox_base}/tmp/busybox-1.16.1
+        local dir_changes=${dir_sdk_changes}/rootfs/autelan/busybox
 
-	cp -f kernel/linux-3.10.y/drivers/usb/serial/option.c ${hisitopdir}/histb/source/kernel/linux-3.10.y/drivers/usb/serial/
+	mkdir -p ${dir_busybox}/autelan ${dir_busybox}/include ${dir_busybox}/init 
+        install_autelan ${dir_busybox}/autelan 
 
+        cp -f ${dir_changes}/Makefile  ${dir_busybox}/
+        cp -f ${dir_changes}/Makefile.flags  ${dir_busybox}/
+        cp -f ${dir_changes}/Config.in ${dir_busybox}/
+        cp -f ${dir_changes}/arm-hisiv200-linux.config ${dir_busybox_base}/busybox-1.16.1.config/
+        cp -fpR ${dir_changes}/include/* ${dir_busybox}/include/
+        cp -fpR ${dir_changes}/init/* ${dir_busybox}/init/
+	
+	echo "copy busybox ok"
+}
+
+install_rootfs() {
+	cp -f ${dir_sdk_changes}/rootfs/top/Makefile ${dir_histb}/source/rootfs/top/
+        cp -f ${dir_sdk_changes}/rootfs/e2fsprogs/Makefile ${dir_histb}/source/rootfs/e2fsprogs/
+
+	echo "copy rootfs: top e2fsprogs ok"
+}
+
+install_sampile() {
+	cp -fpR ${dir_sdk_changes}/sample/* ${dir_histb}/sample/
+
+	echo "copy sample ok"
+}
+
+main() {
+	autelan_git_pull
+
+	install_makefile
+	install_boot
+	install_kernel
+	install_busybox
+	install_rootfs
+	install_sampile
 }
 
 main "$@"
