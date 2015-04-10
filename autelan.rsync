@@ -1,6 +1,11 @@
 #!/bin/bash
 
-. autelan.in
+if [ -z "${hisitopdir}" ]; then
+	export hisitopdir=$(hisitopdir.sh $0)
+fi 
+
+. ${hisitopdir}/autelan_scripts/autelan.in
+
 pushd ${hisitopdir}/custom/etc/utils/
 . utils.in
 popd

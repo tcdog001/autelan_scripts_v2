@@ -1,10 +1,12 @@
 #!/bin/bash
 
-if [ "" == "$1" ]; then
-	. autelan.in
-else
-	hisitopdir=$1
+if [ -n "$1" ]; then
+	export hisitopdir=$1
+elif [ -z "${hisitopdir}" ]; then
+	export hisitopdir=$(hisitopdir.sh $0)
 fi
+
+. ${hisitopdir}/autelan_scripts/autelan.in
 
 pushd ${hisitopdir}/custom/etc/utils/
 . utils.in

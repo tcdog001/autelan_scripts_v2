@@ -6,11 +6,12 @@ else
 	__HISI_AUTELAN_IN__="$0"
 fi
 
-if [ -n "${AUTELAN_DIR}" ]; then
-	. ${AUTELAN_DIR}/autelan.env
-else
-	. autelan.env
+if [ -z "${hisitopdir}" ]; then
+	export hisitopdir=$(hisitopdir.sh $0)
 fi
+
+
+. ${hisitopdir}/autelan_scripts/autelan.env
 
 
 #

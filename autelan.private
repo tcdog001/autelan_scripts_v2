@@ -1,6 +1,10 @@
 #!/bin/bash
 
-. autelan.in
+if [ -z "${hisitopdir}" ]; then
+	export hisitopdir=$(hisitopdir.sh $0)
+fi
+
+. ${hisitopdir}/autelan_scripts/autelan.in
 
 dir_histb=${hisitopdir}/histb
 dir_sdk_changes=${hisitopdir}/sdk_changes
@@ -35,17 +39,19 @@ install_kernel() {
 }
 
 install_busybox() {
-	local dir_busybox_base=${dir_histb}/source/rootfs/busybox/gcc4.4
-        local dir_busybox=${dir_busybox_base}/tmp/busybox-1.16.1
+	local dir_busybox_0=${dir_histb}/source/rootfs/busybox
+	local dir_busybox_1=${dir_busybox_0}/gcc4.4
+        local dir_busybox=${dir_busybox_1}/tmp/busybox-1.16.1
         local dir_changes=${dir_sdk_changes}/rootfs/autelan/busybox
 
-	mkdir -p ${dir_busybox}/autelan ${dir_busybox}/include ${dir_busybox}/init 
         install_autelan ${dir_busybox}/autelan 
 
-        cp -f ${dir_changes}/Makefile  ${dir_busybox}/
+	cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
+	cp -f ${dir_changes}/Makefile.1 ${dir_busybox_1}/Makefile
+	cp -f ${dir_changes}/Makefile  ${dir_busybox}/
         cp -f ${dir_changes}/Makefile.flags  ${dir_busybox}/
         cp -f ${dir_changes}/Config.in ${dir_busybox}/
-        cp -f ${dir_changes}/arm-hisiv200-linux.config ${dir_busybox_base}/busybox-1.16.1.config/
+        cp -f ${dir_changes}/arm-hisiv200-linux.config ${dir_busybox_1}/busybox-1.16.1.config/
         cp -fpR ${dir_changes}/include/* ${dir_busybox}/include/
         cp -fpR ${dir_changes}/init/* ${dir_busybox}/init/
 	cp -fpR ${dir_changes}/autelan/* ${dir_busybox}/autelan/
@@ -67,14 +73,21 @@ install_sampile() {
 }
 
 main() {
+	local obj="$1"
+	local objs="makefile boot kernel busybox rootfs sampile"
+	local object
 	autelan_git_pull
 
-	install_makefile
-	install_boot
-	install_kernel
-	install_busybox
-	install_rootfs
-	install_sampile
+	case ${obj} in
+	makefile|boot|kernel|busybox|rootfs|sampile)
+		install_${obj}
+		;;
+	*)
+		for object in ${objs}; do
+			install_${object}
+		done
+		;;
+	esac
 }
 
 main "$@"

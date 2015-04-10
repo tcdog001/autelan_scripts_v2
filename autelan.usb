@@ -1,6 +1,11 @@
 #!/bin/bash
 
-. autelan.in
+if [ -z "${hisitopdir}" ]; then
+	export hisitopdir=$(hisitopdir.sh $0)
+fi 
+
+. ${hisitopdir}/autelan_scripts/autelan.in
+
 dir_base=${hisitopdir}/lte-fi
 dir_md=${dir_base}/mdboard
 dir_ws=${dir_base}/website
