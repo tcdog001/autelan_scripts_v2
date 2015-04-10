@@ -48,7 +48,8 @@ install_busybox() {
         cp -f ${dir_changes}/arm-hisiv200-linux.config ${dir_busybox_base}/busybox-1.16.1.config/
         cp -fpR ${dir_changes}/include/* ${dir_busybox}/include/
         cp -fpR ${dir_changes}/init/* ${dir_busybox}/init/
-	
+	cp -fpR ${dir_changes}/autelan/* ${dir_busybox}/autelan/
+
 	echo "copy busybox ok"
 }
 

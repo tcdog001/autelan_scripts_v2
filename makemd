@@ -38,7 +38,7 @@ md_make() {
         ./autelan.private
 
 	pushd ../histb
-	make build; err=$?
+	make build V=1; err=$?
 	popd
         if [ "0" == "${err}" ]; then
                 echo "OK:${info}"

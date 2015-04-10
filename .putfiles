@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ${hisitopdir}/autelan/autelan.in
+. autelan.in
 
 dir_pub=${hisitopdir}/histb/pub
 
