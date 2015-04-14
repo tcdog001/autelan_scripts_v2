@@ -1,9 +1,6 @@
 #!/bin/bash
 
-if [ -z "${hisitopdir}" ]; then
-	export hisitopdir=$(hisitopdir.sh $0)
-fi 
-
+if [ -z "${hisitopdir}" ]; then export hisitopdir=$(hisitopdir.sh $0); fi
 . ${hisitopdir}/autelan_scripts/autelan.in
 
 pushd ${hisitopdir}/custom/etc/utils/
