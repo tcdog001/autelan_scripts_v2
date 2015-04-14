@@ -62,7 +62,7 @@ download_app() {
 	popd &> /dev/null
 }
 
-download_apps() {
+apps_download() {
 	local name
 
 	for name in ${auteapps}; do
@@ -70,5 +70,52 @@ download_apps() {
 	done
 }
 
-download_apps
+#
+#$1:dir_src
+#$2:dir_dst
+#
+apps_copy() {
+        local dir_src=$1
+        local dir_dst=$2
+        local app
+        local name
 
+        for app in ${auteapps}; do
+		name=$(get_app_name ${app})
+
+                mkdir -p ${dir_dst}/{name}
+                CP ${dir_src}/${name}/autelan* ${dir_dst}/${name}/
+        done
+}
+
+apps_patch() {
+	apps_copy ${autepackage} ${auterootfs}
+}
+
+apps_backup() {
+	apps_copy ${auterootfs} ${autepackage}
+}
+
+usage() {
+	echo "$0 download"
+	echo "	download apps"
+	echo "$0 patch"
+	echo "	patch apps(package==>rootfs)"
+	echo "$0 backup"
+	echo "	backup apps(rootfs==>package)"
+}
+
+main() {
+	local action="$1"
+
+	case ${action} in
+	download|patch|backup)
+		apps_${action}
+		;;
+	*)
+		usage
+		;;
+	esac
+}
+
+main "$@"
