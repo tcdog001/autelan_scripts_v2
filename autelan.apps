@@ -10,10 +10,36 @@ if [ -z "${hisitopdir}" ]; then export hisitopdir=$(hisitopdir.sh $0); fi
 
 declare auteapps=""
 
+get_app() {
+        local name="app_$1"
+        local key="$2"
+
+        eval "echo \${${name}[${key}]}"
+}
+
+get_app_name() {
+        echo $(get_app $1 name)
+}
+
+get_app_type() {
+        echo $(get_app $1 type)
+}
+
+get_app_url() {
+        echo $(get_app $1 url)
+}
+
+get_app_tag() {
+        echo $(get_app $1 tag)
+}
+
 load_app() {
 	local name="$1"
+	local dir_package=${hisitopdir}/package/$(get_app_name ${name})
 
 	auteapps="${auteapps} ${name}"
+
+	mkdir -p ${dir_package}/autelan
 }
 
 #
@@ -128,7 +154,7 @@ readonly -A app_nginx=(
 load_app nginx
 
 readonly -A app_ntpclient=(
-        [name]=ntpclient_2010_365
+        [name]=ntpclient-2010
         [type]=file
         [url]=http://doolittle.icarus.com/ntpclient/ntpclient_2010_365.tar.gz
 )
@@ -167,7 +193,7 @@ readonly -A app_squashfs=(
         [type]=file
         [url]=http://cznic.dl.sourceforge.net/project/squashfs/squashfs/squashfs4.3/squashfs4.3.tar.gz
 )
-load_app squashf
+load_app squashfs
 
 readonly -A app_util_linux=(
         [name]=util-linux-2.26.1
