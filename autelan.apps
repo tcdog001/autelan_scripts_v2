@@ -8,6 +8,8 @@ fi
 
 if [ -z "${hisitopdir}" ]; then export hisitopdir=$(hisitopdir.sh $0); fi
 
+. ${hisitopdir}/autelan_scripts/autelan.in
+
 declare auteapps=""
 
 get_app() {

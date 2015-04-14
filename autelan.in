@@ -9,7 +9,6 @@ fi
 if [ -z "${hisitopdir}" ]; then export hisitopdir=$(hisitopdir.sh $0); fi
 . ${hisitopdir}/autelan_scripts/autelan.env
 
-
 #
 # copy from openwrt rule.mk
 #

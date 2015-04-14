@@ -1,0 +1,59 @@
+#!/bin/bash
+
+if [ -z "${hisitopdir}" ]; then export hisitopdir=$(hisitopdir.sh $0); fi
+
+. ${hisitopdir}/autelan_scripts/autelan.apps
+
+usage() {
+	echo "$0 package_to_rootfs"
+        echo "$0 rootfs_to_package"
+}
+
+#
+#$1:dir_src
+#$2:dir_dst
+#
+do_copy() {
+	local dir_src=$1
+	local dir_dst=$2
+	local app
+	local name
+
+	for app in ${auteapps}; do
+		name=$(get_app_name ${app})
+
+		mkdir -p ${dir_dst}/{name}
+		CP ${dir_src}/${name}/autelan* ${dir_dst}/${name}/
+	done
+}
+
+main() {
+	local args="$1"
+
+	if [ "1" != "$#" ]; then
+		usage
+
+		return
+	fi
+
+	local dir_src
+	local dir_dst
+
+	case "${args}" in
+	"package_to_rootfs")
+		dir_src=${autepackage}
+		dir_dst=${auterootfs}
+		;;
+	"rootfs_to_package")
+		dir_src=${auterootfs}
+		dir_dst=${autepackage}
+		;;
+	*)
+		usage
+		;;		
+	esac
+
+	do_copy ${dir_src} ${dir_dst}
+}
+
+main "$@"
