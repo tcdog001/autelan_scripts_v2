@@ -1,0 +1,286 @@
+#!/bin/bash
+
+if [ -n "${__HISI_AUTELAN_APPS__}" ]; then
+	return
+else
+	__HISI_AUTELAN_APPS__="$0"
+fi
+
+if [ -z "${hisitopdir}" ]; then export hisitopdir=$(hisitopdir.sh $0); fi
+
+declare auteapps=""
+
+get_app() {
+	local name="$1"
+	local key="$2"
+
+	eval "echo \${${name}[${key}]}"
+}
+
+get_app_name() {
+	local app="app_$1"
+
+	echo $(get_app ${app} name)
+}
+
+get_app_type() {
+	local app="app_$1"
+
+	echo $(get_app ${app} type)
+}
+
+get_app_url() {
+	local app="app_$1"
+
+	echo $(get_app ${app} url)
+}
+
+get_app_tag() {
+	local app="app_$1"
+
+	echo $(get_app ${app} tag)
+}
+
+download_app() {
+	local app="app_$1"
+	local name=$(get_app_name ${app})
+	local type=$(get_app_type ${app})
+	local url=$(get_app_url ${app})
+	local tag=$(get_app_tag ${app})
+	local rootfs=${hisitopdir}/rootfs
+	local file
+
+	if [ -d "${rootfs}/${name}" ]; then
+                return
+        fi
+
+	pushd ${rootfs} &> /dev/null
+	case ${type} in
+	file)
+		file=$(basename ${url})
+		if [ ! -f "${file}" ]; then
+			wget ${url}
+	        fi
+
+		case ${file} in
+	        *.tar.gz)
+	                tar zxvf ${file}
+	                ;;
+	        *.tar.bz2)
+	                tar jxvf ${file}
+	                ;;
+	        *.tar.xz)
+	                tar -Jxvf ${file}
+	                ;;
+	        *)
+	                echo "unknow file"
+	                exit 1
+	                ;;
+	        esac
+		;;
+	git)
+		git clone ${url} ${name}
+		pushd ${name} &> /dev/null
+#		git checkout ${tag}
+		popd &> /dev/null
+		;;
+	*)
+		echo "bad app type:${type}"
+		exit 1
+		;;
+	esac
+	popd &> /dev/null
+}
+
+load_app() {
+	local name="$1"
+
+	auteapps="${auteapps} ${name}"
+
+	download_app ${name}
+}
+
+#
+# libs
+#
+readonly -A app_jsonc=(
+	[name]=json-c
+        [type]=git
+        [url]=https://github.com/json-c/json-c
+)
+load_app jsonc
+
+readonly -A app_zlib=(
+        [name]=zlib-1.2.8
+        [type]=file
+        [url]=http://zlib.net/zlib-1.2.8.tar.gz
+)
+load_app zlib
+
+readonly -A app_libxml2=(
+        [name]=libxml2
+        [type]=git
+        [url]=git://git.gnome.org/libxml2
+)
+load_app libxml2
+
+readonly -A app_libxslt=(
+        [name]=libxslt
+        [type]=git
+        [url]=git://git.gnome.org/libxslt
+)
+load_app libxslt
+
+readonly -A app_openssl=(
+        [name]=openssl-1.0.2a
+        [type]=file
+        [url]=https://www.openssl.org/source/openssl-1.0.2a.tar.gz
+)
+load_app openssl
+
+readonly -A app_pcre=(
+        [name]=pcre-8.36
+        [type]=file
+        [url]=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.36.tar.bz2
+)
+load_app pcre
+
+readonly -A app_popt=(
+        [name]=popt-1.16
+        [type]=file
+        [url]=http://rpm5.org/files/popt/popt-1.16.tar.gz
+)
+load_app popt 
+
+readonly -A app_onig=(
+        [name]=onig-5.9.6
+        [type]=file
+        [url]=http://www.geocities.jp/kosako3/oniguruma/archive/onig-5.9.6.tar.gz
+)
+load_app onig
+
+#
+# apps
+#
+readonly -A app_bash=(
+        [name]=bash-4.3
+        [type]=file
+        [url]=ftp://ftp.gnu.org/gnu/bash/bash-4.3.tar.gz
+)
+load_app bash
+
+readonly -A app_coreutils=(
+        [name]=coreutils-8.23
+        [type]=file
+        [url]=http://ftp.gnu.org/gnu/coreutils/coreutils-8.23.tar.xz
+)
+load_app coreutils
+
+readonly -A app_curl=(
+        [name]=curl-7.41.0
+        [type]=file
+        [url]=http://curl.haxx.se/download/curl-7.41.0.tar.bz2
+)
+load_app curl
+
+readonly -A app_dnsmasq=(
+        [name]=dnsmasq-2.72
+        [type]=file
+        [url]=http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.72.tar.gz
+)
+load_app dnsmasq
+
+readonly -A app_dropbear=(
+        [name]=dropbear-2015.67
+        [type]=file
+        [url]=https://matt.ucc.asn.au/dropbear/dropbear-2015.67.tar.bz2
+)
+load_app dropbear
+
+readonly -A app_jq=(
+        [name]=jq-1.4
+        [type]=file
+        [url]=http://stedolan.github.io/jq/download/source/jq-1.4.tar.gz
+)
+load_app jq
+
+readonly -A app_nginx=(
+        [name]=nginx-1.7.12
+        [type]=file
+        [url]=http://nginx.org/download/nginx-1.7.12.tar.gz
+)
+load_app nginx
+
+readonly -A app_ntpclient=(
+        [name]=ntpclient_2010_365
+        [type]=file
+        [url]=http://doolittle.icarus.com/ntpclient/ntpclient_2010_365.tar.gz
+)
+load_app ntpclient
+
+readonly -A app_openssh=(
+        [name]=openssh-6.8p1
+        [type]=file
+        [url]=ftp://ftp.ca.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-6.8p1.tar.gz
+)
+load_app openssh
+
+readonly -A app_php=(
+        [name]=php-5.6.7
+        [type]=file
+        [url]=http://php.net/distributions/php-5.6.7.tar.bz2
+)
+load_app php
+
+readonly -A app_rsync=(
+        [name]=rsync-3.1.1
+        [type]=file
+        [url]=https://download.samba.org/pub/rsync/rsync-3.1.1.tar.gz
+)
+load_app rsync
+
+readonly -A app_sudo=(
+        [name]=sudo-1.8.13
+        [type]=file
+        [url]=http://www.sudo.ws/sudo/dist/sudo-1.8.13.tar.gz
+)
+load_app sudo
+
+readonly -A app_squashfs=(
+        [name]=squashfs4.3
+        [type]=file
+        [url]=http://cznic.dl.sourceforge.net/project/squashfs/squashfs/squashfs4.3/squashfs4.3.tar.gz
+)
+load_app squashf
+
+readonly -A app_util_linux=(
+        [name]=util-linux-2.26.1
+        [type]=file
+        [url]=https://www.kernel.org/pub/linux/utils/util-linux/v2.26/util-linux-2.26.1.tar.xz
+)
+load_app util_linux
+
+readonly -A app_wifidog=(
+        [name]=wifidog
+        [type]=git
+        [url]=https://github.com/wifidog/wifidog-gateway
+)
+load_app wifidog
+
+readonly -A app_xinetd=(
+        [name]=xinetd
+        [type]=git
+        [url]=https://github.com/xinetd-org/xinetd
+)
+load_app xinetd
+
+readonly -A app_xmlstarlet=(
+        [name]=xmlstarlet-1.6.1
+        [type]=file
+        [url]=http://cznic.dl.sourceforge.net/project/xmlstar/xmlstarlet/1.6.1/xmlstarlet-1.6.1.tar.gz
+)
+load_app xmlstarlet
+
+export auteapps
+echo "auteapps=${auteapps}"
+
