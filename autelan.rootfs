@@ -7,10 +7,6 @@ fi
 . ${hisitopdir}/autelan_scripts/autelan.in
 
 do_install() {
-	rm -f ${hisirootfs}/etc/init.d/S00devs
-	rm -f ${hisirootfs}/etc/init.d/S01udev
-	rm -f ${hisirootfs}/etc/init.d/S90modules
-
 	rm -f ${hisirootfs}/etc/resolv.conf
         echo "======================================="
         echo "rm -f ${hisirootfs}/etc/resolv.conf"

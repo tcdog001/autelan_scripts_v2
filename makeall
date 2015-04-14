@@ -103,6 +103,10 @@ main() {
 
         exec_with_flock ${file_make_lock} do_make ${version}
 	rm -f ${hisitopdir}/version
+
+	if [[ -f .user ]]; then
+                ./.putfiles
+        fi
 }
 
 main "$@"
