@@ -149,9 +149,9 @@ readonly -A app_dropbear=(
 load_app dropbear
 
 readonly -A app_jq=(
-        [name]=jq-1.4
-        [type]=file
-        [url]=http://stedolan.github.io/jq/download/source/jq-1.4.tar.gz
+        [name]=jq
+        [type]=git
+        [url]=https://github.com/stedolan/jq
 )
 load_app jq
 
