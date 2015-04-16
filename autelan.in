@@ -222,7 +222,8 @@ package_save() {
 autelan_git_pull() {
 	local dir_autelan=${hisitopdir}/sdk_changes/rootfs/autelan
 
-	if [[ ! -d ${dir_autelan} ]]; then
+	if [[ ! -d "${dir_autelan}/.git" ]]; then
+		rm -fr ${dir_autelan}
 		git clone https://github.com/ljf10000/bigap ${dir_autelan}
 	fi
 
