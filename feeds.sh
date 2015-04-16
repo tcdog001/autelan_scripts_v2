@@ -68,6 +68,10 @@ apps_download() {
 	for name in ${auteapps}; do
 		download_app ${name}
 	done
+
+	pushd ${auterelease} &> /dev/null
+	mkdir -p bin sbin lib usr usr/bin usr/sbin usr/lib usr/local/bin usr/local/sbin usr/local/lib
+	popd &> /dev/null
 }
 
 #
@@ -83,7 +87,7 @@ apps_copy() {
         for app in ${auteapps}; do
 		name=$(get_app_name ${app})
 
-                mkdir -p ${dir_dst}/{name}
+                mkdir -p ${dir_dst}/${name}
                 CP ${dir_src}/${name}/autelan* ${dir_dst}/${name}/
         done
 }
@@ -96,6 +100,28 @@ apps_backup() {
 	apps_copy ${auterootfs} ${autepackage}
 }
 
+apps_make() {
+	local app name
+
+	for app in ${auteapps}; do
+		name=$(get_app_name ${app})
+
+		pushd ${auterootfs}/${name}
+		echo "******************************************************"
+		echo "  Make ${name} ..."
+		echo "******************************************************"
+
+		sleep 1
+
+		./autelan.build
+		popd
+	done
+
+	find ${auterelease} -name "*.a" | xargs rm -f
+	find ${auterelease} -name "*.la" | xargs rm -f
+	find ${auterelease} -type d -name "html" | xargs rm -fr
+}
+
 usage() {
 	echo "$0 download"
 	echo "	download apps"
@@ -103,13 +129,15 @@ usage() {
 	echo "	patch apps(package==>rootfs)"
 	echo "$0 backup"
 	echo "	backup apps(rootfs==>package)"
+	echo "$0 make"
+	echo "	make apps"
 }
 
 main() {
 	local action="$1"
 
 	case ${action} in
-	download|patch|backup)
+	download|patch|backup|make)
 		apps_${action}
 		;;
 	*)

@@ -213,6 +213,11 @@ package_common() {
 	package_install $1
 }
 
+package_save() {
+	local path=$1
+
+
+}
 
 autelan_git_pull() {
 	local dir_autelan=${hisitopdir}/sdk_changes/rootfs/autelan

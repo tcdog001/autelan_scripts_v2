@@ -61,6 +61,13 @@ readonly -A app_zlib=(
 )
 load_app zlib
 
+readonly -A app_bzip2=(
+	[name]=bzip2-1.0.6
+	[type]=file
+	[url]=http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+)
+load_app bzip2
+
 readonly -A app_libxml2=(
         [name]=libxml2
         [type]=git
@@ -150,7 +157,7 @@ load_app jq
 
 readonly -A app_nginx=(
         [name]=nginx-1.7.12
-        [type]=file
+	[type]=file
         [url]=http://nginx.org/download/nginx-1.7.12.tar.gz
 )
 load_app nginx
