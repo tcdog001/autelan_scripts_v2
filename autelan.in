@@ -219,18 +219,26 @@ package_save() {
 
 }
 
+git_pull() {
+	local dir="$1"
+	local url="$2"
+
+	if  [[ ! -d "${dir}/.git" ]]; then
+		rm -fr ${dir}
+		git clone ${url} ${dir}
+	fi
+
+	pushd ${dir}
+	git pull
+	echo "git clone to ${dir}"
+	popd
+}
+
 autelan_git_pull() {
 	local dir_autelan=${hisitopdir}/sdk_changes/rootfs/autelan
 
-	if [[ ! -d "${dir_autelan}/.git" ]]; then
-		rm -fr ${dir_autelan}
-		git clone https://github.com/ljf10000/bigap ${dir_autelan}
-	fi
-
-	pushd ${dir_autelan}
-        git pull
-        echo "git clone to ${dir_autelan}"
-        popd
+	git_pull ${dir_autelan} https://github.com/ljf10000/bigap
+	git_pull ${dir_autelan}/lib/json-c https://github.com/json-c/json-c
 }
 
 install_autelan() {
