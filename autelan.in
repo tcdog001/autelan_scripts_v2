@@ -238,7 +238,7 @@ autelan_git_pull() {
 	local dir_autelan=${hisitopdir}/sdk_changes/rootfs/autelan
 
 	git_pull ${dir_autelan} https://github.com/ljf10000/bigap
-	git_pull ${dir_autelan}/lib/json-c https://github.com/json-c/json-c
+#	git_pull ${dir_autelan}/lib/json-c https://github.com/json-c/json-c
 }
 
 install_autelan() {
