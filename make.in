@@ -54,12 +54,11 @@ __md_make() {
 md_make() {
 	local version=$1
 
-	if [[ ! -d ${hisitopdir}/histb/pub/include || \
-		! -d ${hisitopdir}/histb/pub/lib/share ]]; then
+	./autelan.private
+
+	if [[ ! -f ${hisitopdir}/histb/pub/include/hi_unf_wdg.h ]]; then
 		__md_make ${version}
 	fi
-
-	./autelan.private
 
 	__md_make ${version}
 }

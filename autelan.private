@@ -71,7 +71,7 @@ install_sampile() {
 
 main() {
 	local obj="$1"
-	local objs="makefile boot kernel busybox rootfs sampile"
+	local objs="makefile boot kernel rootfs sampile"
 	local object
 	autelan_git_pull
 
