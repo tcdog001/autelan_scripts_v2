@@ -63,20 +63,26 @@ install_rootfs() {
 	echo "copy rootfs: top e2fsprogs ok"
 }
 
-install_sampile() {
+install_sample() {
 	cp -fpR ${dir_sdk_changes}/sample/* ${dir_histb}/sample/
 
 	echo "copy sample ok"
 }
 
+install_scripts() {
+	cp -fpR ${dir_sdk_changes}/scripts/* ${dir_histb}/scripts/
+
+	echo "copy scripts ok"
+}
+
 main() {
 	local obj="$1"
-	local objs="makefile boot kernel rootfs sampile"
+	local objs="makefile boot kernel rootfs sample scripts"
 	local object
 	autelan_git_pull
 
 	case ${obj} in
-	makefile|boot|kernel|busybox|rootfs|sampile)
+	makefile|boot|kernel|busybox|rootfs|sample|scripts)
 		install_${obj}
 		;;
 	*)
