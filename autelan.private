@@ -33,6 +33,8 @@ install_kernel() {
 	cp -f ${dir_src}/autelan.config ${dir_dst}/.config
 
 	echo "copy kernel: config ok"
+	
+	cp -f ${dir_src}/drivers/usb/serial/option.c ${dir_dst}/drivers/usb/serial/
 }
 
 install_busybox() {
