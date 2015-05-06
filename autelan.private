@@ -37,6 +37,13 @@ install_kernel() {
 	cp -f ${dir_src}/drivers/usb/serial/option.c ${dir_dst}/drivers/usb/serial/
 }
 
+install_busybox0() {
+	local dir_busybox_0=${dir_histb}/source/rootfs/busybox
+	local dir_changes=${dir_sdk_changes}/rootfs/autelan/busybox
+
+	cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
+}
+
 install_busybox() {
 	local dir_busybox_0=${dir_histb}/source/rootfs/busybox
 	local dir_busybox_1=${dir_busybox_0}/gcc4.4
@@ -79,7 +86,7 @@ install_scripts() {
 
 main() {
 	local obj="$1"
-	local objs="makefile boot kernel rootfs sample scripts"
+	local objs="makefile boot kernel rootfs sample scripts busybox0"
 	local object
 	autelan_git_pull
 

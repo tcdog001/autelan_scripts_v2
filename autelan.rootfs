@@ -5,9 +5,11 @@ if [ -z "${hisitopdir}" ]; then export hisitopdir=$(hisitopdir.sh $0); fi
 
 do_install() {
 	rm -f ${hisirootfs}/etc/resolv.conf
-        echo "======================================="
+	rm -fr ${hisirootfs}/var
+	echo "======================================="
         echo "rm -f ${hisirootfs}/etc/resolv.conf"
-        echo "======================================="
+	echo "rm -fr ${hisirootfs}/var"
+	echo "======================================="
 
 	rm -fr ${hisirootfs}/opt
 	rm -f ${hisirootfs}/usr/bin/du
