@@ -30,6 +30,26 @@ ap_make() {
 #
 #$1:version
 #
+mdboot_make() {
+        local info="make md boot"
+        local err=0;
+
+        pushd ${hisitopdir}/histb
+	        make hiboot_install V=1; err=$?
+        popd
+
+        if [ "0" == "${err}" ]; then
+                echo "OK:${info}"
+        else
+                echo "ERROR[${err}]:${info}"
+        fi
+
+        return ${err}
+}
+
+#
+#$1:version
+#
 __md_make() {
         local version=$1
         local info="make md version:${version}"
