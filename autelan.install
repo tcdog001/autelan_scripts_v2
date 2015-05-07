@@ -53,11 +53,16 @@ copy_to_local() {
 	rm -fr ${dir}
 
 	mkdir -p ${dir}/rootfs ${dir}/rootfs_data
-	echo "#### cp -fpR ${dir_rootfs}/* ${dir}/rootfs ####"
+        echo "####################################################"
+	echo "cp -fpR ${dir_rootfs}/* ${dir}/rootfs"
+        echo "####################################################"
 	cp -fpR ${dir_rootfs}/* ${dir}/rootfs
 	
 	chown -R root:root ${dir}/rootfs
-	echo "#### cp -fpR ${install_dir_rootfs_data}/* ${dir}/rootfs_data #####"
+	echo "####################################################"
+	echo "cp -fpR ${install_dir_rootfs_data}/* ${dir}/rootfs_data"
+	echo "####################################################"
+
 	cp -fpR ${install_dir_rootfs_data}/* ${dir}/rootfs_data
 	chown -R root:root ${dir}/rootfs_data
 	
@@ -97,7 +102,10 @@ copy_to_local_ws() {
 
         mkdir -p ${dst}
 
-	echo "#### cp -fpR ${src}/* ${dst} ####"
+        echo "####################################################"
+	echo "cp -fpR ${src}/* ${dst}"
+        echo "####################################################"
+
         cp -fpR ${src}/* ${dst}
         chown -R root:root ${dst}
 
