@@ -14,7 +14,7 @@ ap_make() {
 
         echo "${info} ..."
 
-        pushd ../trunk_project/trunk
+        pushd ../ap_project/qsdk
 	./make_71xx.sh ${hisitopdir}; err=$?
 	popd
 	if [ "0" == "${err}" ]; then
@@ -126,7 +126,7 @@ __make_obj() {
 }
 
 get_make_lock_file() {
-	local dir=/tmp$(pwd)
+	local dir=/tmp/$(whoami)
 	local file=${dir}/.make.lock
 
 	mkdir -p ${dir}
