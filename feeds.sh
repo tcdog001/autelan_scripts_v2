@@ -113,6 +113,9 @@ apps_make() {
 
 		sleep 1
 
+		if [ -f autelan.configure ]; then
+			./autelan.configure
+		fi
 		./autelan.build
 		popd
 	done
@@ -120,6 +123,18 @@ apps_make() {
 	find ${auterelease} -name "*.a" | xargs rm -f
 	find ${auterelease} -name "*.la" | xargs rm -f
 	find ${auterelease} -type d -name "html" | xargs rm -fr
+}
+
+apps_clean() {
+        local app name
+
+        for app in ${auteapps}; do
+                name=$(get_app_name ${app})
+
+                pushd ${auterootfs}/${name}
+		make clean
+                popd
+        done
 }
 
 usage() {
@@ -131,13 +146,15 @@ usage() {
 	echo "	backup apps(rootfs==>package)"
 	echo "$0 make"
 	echo "	make apps"
+	echo "$0 make clean"
+	echo "	make clean apps"
 }
 
 main() {
 	local action="$1"
 
 	case ${action} in
-	download|patch|backup|make)
+	download|patch|backup|make|clean)
 		apps_${action}
 		;;
 	*)
