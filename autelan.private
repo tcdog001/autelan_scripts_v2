@@ -26,15 +26,17 @@ install_boot() {
 }
 
 install_kernel() {
-	local dir_src=${dir_sdk_changes}/kernel/linux-3.10.y
-	local dir_dst=${dir_histb}/source/kernel/linux-3.10.y
+	local version=linux-3.10.y
+	local dir_src=${dir_sdk_changes}/kernel
+	local dir_dst=${dir_histb}/source/kernel
 
-	cp -f ${dir_src}/autelan.config ${dir_dst}/
-	cp -f ${dir_src}/autelan.config ${dir_dst}/.config
+	cp -f ${dir_src}/Makefile ${dir_dst}/
+	cp -f ${dir_src}/${version}/autelan.config ${dir_dst}/${version}/
+	cp -f ${dir_src}/${version}/autelan.config ${dir_dst}/${version}/.config
 
 	echo "copy kernel: config ok"
 	
-	cp -f ${dir_src}/drivers/usb/serial/option.c ${dir_dst}/drivers/usb/serial/
+	cp -f ${dir_src}/${version}/drivers/usb/serial/option.c ${dir_dst}/${version}/drivers/usb/serial/
 }
 
 install_busybox0() {
