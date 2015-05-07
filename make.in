@@ -34,6 +34,8 @@ mdboot_make() {
         local info="make md boot"
         local err=0;
 
+	./autelan.private
+
         pushd ${hisitopdir}/histb
 		make hiboot_clean
 		make hiboot_install V=1; err=$?

@@ -39,9 +39,11 @@ install_kernel() {
 
 install_busybox0() {
 	local dir_busybox_0=${dir_histb}/source/rootfs/busybox
+	local dir_busybox_1=${dir_busybox_0}/gcc4.4
 	local dir_changes=${dir_sdk_changes}/rootfs/autelan/busybox
 
 	cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
+	cp -f ${dir_changes}/Makefile.1 ${dir_busybox_1}/Makefile
 }
 
 install_busybox() {
