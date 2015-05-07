@@ -30,6 +30,29 @@ ap_make() {
 #
 #$1:version
 #
+mdboot_make() {
+        local info="make md boot"
+        local err=0;
+
+	./autelan.private
+
+        pushd ${hisitopdir}/histb
+		make hiboot_clean
+		make hiboot_install V=1; err=$?
+        popd
+
+        if [ "0" == "${err}" ]; then
+                echo "OK:${info}"
+        else
+                echo "ERROR[${err}]:${info}"
+        fi
+
+        return ${err}
+}
+
+#
+#$1:version
+#
 __md_make() {
         local version=$1
         local info="make md version:${version}"
@@ -54,12 +77,11 @@ __md_make() {
 md_make() {
 	local version=$1
 
-	if [[ ! -d ${hisitopdir}/histb/pub/include || \
-		! -d ${hisitopdir}/histb/pub/lib/share ]]; then
+	./autelan.private
+
+	if [[ ! -f ${hisitopdir}/histb/pub/include/hi_unf_wdg.h ]]; then
 		__md_make ${version}
 	fi
-
-	./autelan.private
 
 	__md_make ${version}
 }

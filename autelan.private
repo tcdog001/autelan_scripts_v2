@@ -33,6 +33,17 @@ install_kernel() {
 	cp -f ${dir_src}/autelan.config ${dir_dst}/.config
 
 	echo "copy kernel: config ok"
+	
+	cp -f ${dir_src}/drivers/usb/serial/option.c ${dir_dst}/drivers/usb/serial/
+}
+
+install_busybox0() {
+	local dir_busybox_0=${dir_histb}/source/rootfs/busybox
+	local dir_busybox_1=${dir_busybox_0}/gcc4.4
+	local dir_changes=${dir_sdk_changes}/rootfs/autelan/busybox
+
+	cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
+	cp -f ${dir_changes}/Makefile.1 ${dir_busybox_1}/Makefile
 }
 
 install_busybox() {
@@ -63,20 +74,26 @@ install_rootfs() {
 	echo "copy rootfs: top e2fsprogs ok"
 }
 
-install_sampile() {
+install_sample() {
 	cp -fpR ${dir_sdk_changes}/sample/* ${dir_histb}/sample/
 
 	echo "copy sample ok"
 }
 
+install_scripts() {
+	cp -fpR ${dir_sdk_changes}/scripts/* ${dir_histb}/scripts/
+
+	echo "copy scripts ok"
+}
+
 main() {
 	local obj="$1"
-	local objs="makefile boot kernel busybox rootfs sampile"
+	local objs="makefile boot kernel rootfs sample scripts busybox0"
 	local object
 	autelan_git_pull
 
 	case ${obj} in
-	makefile|boot|kernel|busybox|rootfs|sampile)
+	makefile|boot|kernel|busybox|rootfs|sample|scripts)
 		install_${obj}
 		;;
 	*)

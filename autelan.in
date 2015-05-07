@@ -248,5 +248,7 @@ install_autelan() {
         rm -fr ${dst}/*
         mkdir -p ${dst}
         cp -fpR ${dir_autelan}/* ${dst}/
+	
+	echo "install autelan to ${dst}"
 }
 
