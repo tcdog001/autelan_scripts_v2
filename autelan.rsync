@@ -12,7 +12,7 @@ ssh_script=./ssh.sh
 version=$(cat ${hisitopdir}/custom/etc/.version)
 
 usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
-fs_list="rootfs_200M.ext4 rootfs_data_3000M.ext4"
+fs_list="rootfs_256M.ext4 rootfs_data_820M.ext4"
 
 rsync_config=${hisitopdir}/autelan_scripts/.rsync.conf
 
@@ -72,7 +72,7 @@ rsync_to_remote() {
 main() {
 	local local_base=${hisitopdir}/lte-fi
 	local local_md=${local_base}/mdboard
-	local dir_base=/opt/version/lte-fi
+	local dir_base=/opt/version/lte-fi2
 	local dir_md=${dir_base}/mdboard
 
 	local -A hash=( \

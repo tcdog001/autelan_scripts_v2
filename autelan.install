@@ -20,7 +20,7 @@ version=$(cat ${hisitopdir}/custom/etc/.version)
 ws_version=$(cat ${install_dir_website}/ver.info)
 
 usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
-fs_list="rootfs_200M.ext4 rootfs_data_3000M.ext4"
+fs_list="rootfs_256M.ext4 rootfs_data_820M.ext4"
 
 #
 #$1:dir
@@ -30,8 +30,8 @@ rootfs_chmod() {
 
 	chmod 600 ${dir}/rootfs/etc/ssh/ssh_host_rsa_key
 	chmod 440 ${dir}/rootfs/etc/sudoers
-	chmod 755 ${dir}/rootfs/usr/local/sudo/libexec/sudoers.so
-	chmod u+s ${dir}/rootfs/sbin/sudo
+	chmod 755 ${dir}/rootfs/usr/lib/sudoers.so
+	chmod u+s ${dir}/rootfs/usr/bin/sudo
 }
 
 #

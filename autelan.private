@@ -30,7 +30,6 @@ install_kernel() {
 	local dir_src=${dir_sdk_changes}/kernel
 	local dir_dst=${dir_histb}/source/kernel
 
-	cp -f ${dir_src}/Makefile ${dir_dst}/
 	cp -f ${dir_src}/${version}/autelan.config ${dir_dst}/${version}/
 	cp -f ${dir_src}/${version}/autelan.config ${dir_dst}/${version}/.config
 
