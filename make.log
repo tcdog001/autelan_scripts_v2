@@ -1,0 +1,21 @@
+hisitopdir=/home/liujingfei/v2/autelan_scripts/..
+hisiprefix=arm-hisiv200-linux
+hisitools=/opt/hisi-linux/x86-arm/arm-hisiv200-linux/target
+hisirootfs=/home/liujingfei/v2/autelan_scripts/../histb/pub/rootfs
+auterootfs=/home/liujingfei/v2/autelan_scripts/../rootfs
+autepackage=/home/liujingfei/v2/autelan_scripts/../package
+auterelease=/home/liujingfei/v2/autelan_scripts/../release
+autefake=/home/liujingfei/v2/autelan_scripts/../fakerelease
+autecustom=/home/liujingfei/v2/autelan_scripts/../custom
+__ROOTFS__=/home/liujingfei/v2/autelan_scripts/../custom
+hisitopdir=/home/liujingfei/v2/autelan_scripts/..
+hisiprefix=arm-hisiv200-linux
+hisitools=/opt/hisi-linux/x86-arm/arm-hisiv200-linux/target
+hisirootfs=/home/liujingfei/v2/autelan_scripts/../histb/pub/rootfs
+auterootfs=/home/liujingfei/v2/autelan_scripts/../rootfs
+autepackage=/home/liujingfei/v2/autelan_scripts/../package
+auterelease=/home/liujingfei/v2/autelan_scripts/../release
+autefake=/home/liujingfei/v2/autelan_scripts/../fakerelease
+autecustom=/home/liujingfei/v2/autelan_scripts/../custom
+__ROOTFS__=/home/liujingfei/v2/autelan_scripts/../custom
+~/v2/sdk_changes/rootfs/autelan ~/v2/autelan_scripts
