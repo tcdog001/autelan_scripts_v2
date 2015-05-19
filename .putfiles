@@ -12,6 +12,11 @@ main() {
 	ftpput_byuser ${dir_pub}/image ${remote} rootfs_config_32M.ext4
 	ftpput_byuser ${dir_pub}/image ${remote} rootfs_data_820M.ext4
 	ftpput_byuser ${dir_pub}/image ${remote} rootfs_256M.ext4
+
+	local dir_ap=${hisitopdir}/ap_project/qsdk/bin/ar71xx
+
+	ftpput_byuser ${dir_ap} _ openwrt-ar71xx-generic-ap147-16M-squashfs-sysupgrade.bin
+
 }
 
 main "$@"

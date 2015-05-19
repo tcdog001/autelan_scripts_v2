@@ -126,13 +126,20 @@ ftpput() {
 
         mkdir -p $(dirname ${dir_local}/${file})
 
+	local file_remote
+	if [[ "_" == "${dir_remote}" ]]; then
+		file_remote=${file}
+	else
+		file_remote=${dir_remote}/${file}
+	fi
+
         busybox ftpput -u ${user} -p ${pass} ${server} \
-                ${dir_remote}/${file} ${dir_local}/${file}; err=$?
+                ${file_remote} ${dir_local}/${file}; err=$?
         if [ "0" != "${err}" ]; then
                 tag="ERROR[${err}]"
         fi
 
-        echo "${tag}: ftpput ${dir_local}/${file} to ${server}:${dir_remote}/${file}"
+        echo "${tag}: ftpput ${dir_local}/${file} to ${server}:${file_remote}"
 
         return ${err}
 }
