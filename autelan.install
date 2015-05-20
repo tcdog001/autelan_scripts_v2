@@ -20,7 +20,7 @@ version=$(cat ${hisitopdir}/custom/etc/.version)
 ws_version=$(cat ${install_dir_website}/ver.info)
 
 usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
-fs_list="rootfs_256M.ext4 rootfs_config_32M.ext4 rootfs_data_820M.ext4 openwrt-ar71xx-generic-ap147-16M-squashfs-sysupgrade.bin"
+fs_list="rootfs_256M.ext4 rootfs_config_32M.ext4 rootfs_data_820M.ext4"
 
 #
 #$1:dir
@@ -49,13 +49,17 @@ copy_to_local() {
 
 	mkdir -p ${dir}/rootfs ${dir}/rootfs_data
         echo "####################################################"
-	echo "cp -fpR ${dir_rootfs}/* ${dir}/rootfs"
+	echo "${dir_rootfs}/*"
+       	echo "	==>"
+	echo "${dir}/rootfs"
         echo "####################################################"
 	cp -fpR ${dir_rootfs}/* ${dir}/rootfs
 	
 	chown -R root:root ${dir}/rootfs
 	echo "####################################################"
-	echo "cp -fpR ${install_dir_rootfs_data}/* ${dir}/rootfs_data"
+	echo "${install_dir_rootfs_data}/*"
+	echo "	==>"
+	echo "${dir}/rootfs_data"
 	echo "####################################################"
 
 	cp -fpR ${install_dir_rootfs_data}/* ${dir}/rootfs_data
@@ -98,7 +102,9 @@ copy_to_local_ws() {
         mkdir -p ${dst}
 
         echo "####################################################"
-	echo "cp -fpR ${src}/* ${dst}"
+	echo "${src}/*"
+	echo "	==>"
+	echo "${dst}"
         echo "####################################################"
 
         cp -fpR ${src}/* ${dst}

@@ -81,12 +81,7 @@ md_make() {
 	fi
 
 	__md_make ${version}
-
-	local dir_ap=${hisitopdir}/ap_project/qsdk
-        local dir_ap_bin=${dir_ap}/bin/ar71xx
-        local file_ap_bin=openwrt-ar71xx-generic-ap147-16M-squashfs-sysupgrade.bin
-
-	cp -f ${dir_ap_bin}/${file_ap_bin} ${hisitopdir}/histb/pub/image/
+	cp -f ${hisitopdir}/custom/image/sysupgrade.bin ${hisitopdir}/histb/pub/image/
 }
 
 
