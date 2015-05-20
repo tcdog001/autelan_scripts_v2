@@ -95,7 +95,6 @@ save_version() {
 
         echo ${version} > ${hisitopdir}/version
         echo ${version} > ${hisitopdir}/custom/etc/.version
-        echo ${version} > ${hisitopdir}/custom/etc/.buddy_version
 }
 
 #
