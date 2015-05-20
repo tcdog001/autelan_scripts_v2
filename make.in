@@ -11,10 +11,11 @@ ap_make() {
 	local version=$1
         local info="make ap version:${version}"
         local err=0;
+	local dir_ap=${hisitopdir}/ap_project/qsdk
 
         echo "${info} ..."
 
-        pushd ../ap_project/qsdk
+        pushd ${dir_ap}
 	./make_71xx.sh ${hisitopdir}; err=$?
 	popd
 	if [ "0" == "${err}" ]; then
@@ -23,8 +24,6 @@ ap_make() {
 		echo "ERROR[${err}]:${info}"
 		exit 1
 	fi
-
-	return ${err}
 }
 
 #
@@ -45,9 +44,8 @@ mdboot_make() {
                 echo "OK:${info}"
         else
                 echo "ERROR[${err}]:${info}"
-        fi
-
-        return ${err}
+		exit 1
+	fi
 }
 
 #
@@ -66,9 +64,8 @@ __md_make() {
                 echo "OK:${info}"
         else
                 echo "ERROR[${err}]:${info}"
-        fi
-
-        return ${err}
+		exit 1
+	fi
 }
 
 #
@@ -84,6 +81,12 @@ md_make() {
 	fi
 
 	__md_make ${version}
+
+	local dir_ap=${hisitopdir}/ap_project/qsdk
+        local dir_ap_bin=${dir_ap}/bin/ar71xx
+        local file_ap_bin=openwrt-ar71xx-generic-ap147-16M-squashfs-sysupgrade.bin
+
+	cp -f ${dir_ap_bin}/${file_ap_bin} ${hisitopdir}/pub/image/
 }
 
 

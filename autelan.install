@@ -20,7 +20,7 @@ version=$(cat ${hisitopdir}/custom/etc/.version)
 ws_version=$(cat ${install_dir_website}/ver.info)
 
 usb_list="fastboot-burn.bin hi_kernel.bin pq_param_hi3718cv100.bin"
-fs_list="rootfs_256M.ext4 rootfs_data_820M.ext4"
+fs_list="rootfs_256M.ext4 rootfs_config_32M.ext4 rootfs_data_820M.ext4 openwrt-ar71xx-generic-ap147-16M-squashfs-sysupgrade.bin"
 
 #
 #$1:dir
