@@ -5,7 +5,7 @@
 dir_pub=${hisitopdir}/histb/pub
 
 main() {
-	local remote="$1"; remote=${remote:-his3718/image-liujf/2015-03-02}
+	local remote; read _ _ _ remote < .user
 
 	ftpput_byuser ${dir_pub}/image ${remote} fastboot-burn.bin
 	ftpput_byuser ${dir_pub}/image ${remote} hi_kernel.bin

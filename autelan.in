@@ -155,7 +155,7 @@ ftpget_byuser() {
         local file=$3
 
 	local ip user pass
-	read ip user pass < .user
+	read ip user pass _ < .user
 
 	ftpget ${ip} ${user} ${pass} ${dir_local} ${dir_remote} ${file}
 }
@@ -171,7 +171,7 @@ ftpput_byuser() {
         local file=$3
 
 	local ip user pass
-	read ip user pass < .user
+	read ip user pass _ < .user
 
         ftpput ${ip} ${user} ${pass} ${dir_local} ${dir_remote} ${file}
 }
