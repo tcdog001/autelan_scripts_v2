@@ -11,10 +11,11 @@ ap_make() {
 	local version=$1
         local info="make ap version:${version}"
         local err=0;
+	local dir_ap=${hisitopdir}/ap_project/qsdk
 
         echo "${info} ..."
 
-        pushd ../trunk_project/trunk
+        pushd ${dir_ap}
 	./make_71xx.sh ${hisitopdir}; err=$?
 	popd
 	if [ "0" == "${err}" ]; then
@@ -23,8 +24,6 @@ ap_make() {
 		echo "ERROR[${err}]:${info}"
 		exit 1
 	fi
-
-	return ${err}
 }
 
 #
@@ -45,9 +44,8 @@ mdboot_make() {
                 echo "OK:${info}"
         else
                 echo "ERROR[${err}]:${info}"
-        fi
-
-        return ${err}
+		exit 1
+	fi
 }
 
 #
@@ -66,9 +64,8 @@ __md_make() {
                 echo "OK:${info}"
         else
                 echo "ERROR[${err}]:${info}"
-        fi
-
-        return ${err}
+		exit 1
+	fi
 }
 
 #
@@ -84,6 +81,7 @@ md_make() {
 	fi
 
 	__md_make ${version}
+	cp -f ${hisitopdir}/custom/image/sysupgrade.bin ${hisitopdir}/histb/pub/image/
 }
 
 
@@ -95,7 +93,6 @@ save_version() {
 
         echo ${version} > ${hisitopdir}/version
         echo ${version} > ${hisitopdir}/custom/etc/.version
-        echo ${version} > ${hisitopdir}/custom/etc/.buddy_version
 }
 
 #
@@ -126,7 +123,7 @@ __make_obj() {
 }
 
 get_make_lock_file() {
-	local dir=/tmp$(pwd)
+	local dir=/tmp/$(whoami)
 	local file=${dir}/.make.lock
 
 	mkdir -p ${dir}

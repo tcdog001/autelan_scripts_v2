@@ -126,13 +126,20 @@ ftpput() {
 
         mkdir -p $(dirname ${dir_local}/${file})
 
+	local file_remote
+	if [[ "_" == "${dir_remote}" ]]; then
+		file_remote=${file}
+	else
+		file_remote=${dir_remote}/${file}
+	fi
+
         busybox ftpput -u ${user} -p ${pass} ${server} \
-                ${dir_remote}/${file} ${dir_local}/${file}; err=$?
+                ${file_remote} ${dir_local}/${file}; err=$?
         if [ "0" != "${err}" ]; then
                 tag="ERROR[${err}]"
         fi
 
-        echo "${tag}: ftpput ${dir_local}/${file} to ${server}:${dir_remote}/${file}"
+        echo "${tag}: ftpput ${dir_local}/${file} to ${server}:${file_remote}"
 
         return ${err}
 }
@@ -148,7 +155,7 @@ ftpget_byuser() {
         local file=$3
 
 	local ip user pass
-	read ip user pass < .user
+	read ip user pass _ < .user
 
 	ftpget ${ip} ${user} ${pass} ${dir_local} ${dir_remote} ${file}
 }
@@ -164,7 +171,7 @@ ftpput_byuser() {
         local file=$3
 
 	local ip user pass
-	read ip user pass < .user
+	read ip user pass _ < .user
 
         ftpput ${ip} ${user} ${pass} ${dir_local} ${dir_remote} ${file}
 }
@@ -235,20 +242,19 @@ git_pull() {
 }
 
 autelan_git_pull() {
-	local dir_autelan=${hisitopdir}/sdk_changes/rootfs/autelan
-
-	git_pull ${dir_autelan} https://github.com/ljf10000/bigap
-#	git_pull ${dir_autelan}/lib/json-c https://github.com/json-c/json-c
+	local dir_capp=${hisitopdir}/capp
+	
+	git_pull ${dir_capp} git@192.168.15.112:capp.git
 }
 
 install_autelan() {
         local dst="$1"
-        local dir_autelan=${hisitopdir}/sdk_changes/rootfs/autelan
+        local dir_capp=${hisitopdir}/capp
 
         rm -fr ${dst}/*
         mkdir -p ${dst}
-        cp -fpR ${dir_autelan}/* ${dst}/
+        cp -fpR ${dir_capp}/* ${dst}/
 	
-	echo "install autelan to ${dst}"
+	echo "install capp to ${dst}"
 }
 
