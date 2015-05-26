@@ -220,12 +220,6 @@ package_common() {
 	package_install $1
 }
 
-package_save() {
-	local path=$1
-
-
-}
-
 git_pull() {
 	local dir="$1"
 	local url="$2"

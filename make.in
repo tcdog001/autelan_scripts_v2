@@ -12,11 +12,27 @@ ap_make() {
         local info="make ap version:${version}"
         local err=0;
 	local dir_ap=${hisitopdir}/ap_project/qsdk
+	local dir_target
 
         echo "${info} ..."
 
-        pushd ${dir_ap}
-	./make_71xx.sh ${hisitopdir}; err=$?
+	autelan_git_pull
+
+#	dir_target=${dir_ap}/package/myapp
+#	install_autelan ${dir_target}
+#	cp ${dir_target}/openwrt.app.mk ${dir_target}/Makefile
+        
+#	dir_target=${dir_ap}/package/mylib
+#	install_autelan ${dir_target}
+#	cp ${dir_target}/openwrt.lib.mk ${dir_target}/Makefile
+
+	dir_target=${dir_ap}/package/capp
+	install_autelan ${dir_target}
+	cp ${dir_target}/openwrt.mk ${dir_target}/Makefile
+	cp ${dir_target}/lib/appkey/openwrt.mk ${dir_target}/lib/appkey/Makefile
+
+	pushd ${dir_ap}
+	OS_TYPE=openwrt ./make_71xx.sh ${hisitopdir} V=s; err=$?
 	popd
 	if [ "0" == "${err}" ]; then
 		echo "OK:${info}"
@@ -122,16 +138,7 @@ __make_obj() {
         fi
 }
 
-get_make_lock_file() {
-	local dir=/tmp/$(whoami)
-	local file=${dir}/.make.lock
-
-	mkdir -p ${dir}
-
-	touch ${file}
-
-	echo ${file}
-}
+file_make_lock=/tmp/.$(whoami).ltefi2.lock
 
 #
 #$1:version
@@ -146,7 +153,7 @@ make_obj() {
                 return 1
         }
 
-	exec_with_flock $(get_make_lock_file) __make_obj "$@" 
+	exec_with_flock ${file_make_lock} __make_obj "$@" 
 	rm -f ${hisitopdir}/version
 
 	if [[ -f .user ]]; then
