@@ -127,6 +127,13 @@ readonly -A app_bash=(
 )
 load_app bash
 
+readonly -A app_binutils=(
+	[name]=binutils-2.25
+	[type]=file
+	[url]=http://ftp.gnu.org/gnu/binutils/binutils-2.25.tar.bz2
+)
+load_app binutils
+
 readonly -A app_coreutils=(
         [name]=coreutils-8.23
         [type]=file
