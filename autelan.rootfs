@@ -13,6 +13,8 @@ do_install() {
 
 	rm -fr ${hisirootfs}/opt
 	rm -f ${hisirootfs}/usr/bin/du
+	rm -f ${hisirootfs}/bin/date
+
 	CP ../release/* ${hisirootfs}
 	CP ../custom/* ${hisirootfs}
 
