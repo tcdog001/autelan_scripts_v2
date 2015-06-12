@@ -18,21 +18,12 @@ ap_make() {
 
 	autelan_git_pull
 
-#	dir_target=${dir_ap}/package/myapp
-#	install_autelan ${dir_target}
-#	cp ${dir_target}/openwrt.app.mk ${dir_target}/Makefile
-        
-#	dir_target=${dir_ap}/package/mylib
-#	install_autelan ${dir_target}
-#	cp ${dir_target}/openwrt.lib.mk ${dir_target}/Makefile
-
 	dir_target=${dir_ap}/package/capp
 	install_autelan ${dir_target}
 	cp ${dir_target}/openwrt.mk ${dir_target}/Makefile
-	cp ${dir_target}/lib/appkey/openwrt.mk ${dir_target}/lib/appkey/Makefile
 
 	pushd ${dir_ap}
-	OS_TYPE=openwrt ./make_71xx.sh ${hisitopdir} V=s; err=$?
+	./make_71xx.sh ${hisitopdir} V=s; err=$?
 	popd
 	if [ "0" == "${err}" ]; then
 		echo "OK:${info}"
