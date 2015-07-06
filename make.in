@@ -15,6 +15,7 @@ ap_make() {
 	local dir_target
 
         echo "${info} ..."
+	./share.sh ap
 
 	autelan_git_pull
 
