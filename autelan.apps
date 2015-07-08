@@ -253,6 +253,13 @@ readonly -A app_xmlstarlet=(
 )
 load_app xmlstarlet
 
+readonly -A app_xml2=(
+        [name]=xml2-0.5
+        [type]=file
+        [url]=http://download.ofb.net/gale/xml2-0.5.tar.gz
+)
+load_app xml2
+
 export auteapps
 echo "auteapps=${auteapps}"
 
