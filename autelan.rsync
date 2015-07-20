@@ -76,7 +76,8 @@ main() {
 	local dir_md=${dir_base}/mdboard
 
 	local -A hash=( \
-		[182.254.198.168]=ltefi@Autelan1 \
+#		[182.254.198.168]=ltefi@Autelan1 \
+		[121.43.231.237]=Autelan1202 \
 #		[192.168.15.26]=AutelanE830 \
 		[192.168.15.112]=AutelanE830 \
 	)
