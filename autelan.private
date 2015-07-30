@@ -35,7 +35,7 @@ install_kernel() {
 
 	echo "copy kernel: config ok"
 	
-	cp -f ${dir_src}/${version}/drivers/usb/serial/option.c ${dir_dst}/${version}/drivers/usb/serial/
+	cp -f ${dir_src}/${version}/drivers/usb/serial/* ${dir_dst}/${version}/drivers/usb/serial/
 }
 
 install_busybox0() {
