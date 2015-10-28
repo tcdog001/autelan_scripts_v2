@@ -238,7 +238,7 @@ git_pull() {
 autelan_git_pull() {
 	local dir_capp=${hisitopdir}/capp
 	
-	git_pull ${dir_capp} git@192.168.15.112:capp.git
+	git_pull ${dir_capp} https://github.com/smallcapp/capp 
 }
 
 install_autelan() {
