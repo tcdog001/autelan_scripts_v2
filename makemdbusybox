@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ -z "${hisitopdir}" ]; then export hisitopdir=$(hisitopdir.sh $0); fi
+. ${hisitopdir}/autelan_scripts/make.in
+
+#
+#$1:version
+#
+main() {
+	make_obj 0.0.0.1 no_install mdbusybox
+
+	rm -f ${hisitopdir}/histb/source/rootfs/pub/rootfs/bin/sh
+	rm -f ${hisitopdir}/histb/source/rootfs/pub/rootfs/bin/date
+	rm -f ${hisitopdir}/histb/source/rootfs/pub/rootfs/usr/bin/du
+
+	cp -fpR ${hisitopdir}/histb/source/rootfs/pub/rootfs/* ${hisitopdir}/release/
+	rm -fr ${hisitopdir}/histb/source/rootfs/pub/rootfs/*
+}
+
+main "$@"
+

@@ -56,6 +56,30 @@ mdboot_make() {
 	fi
 }
 
+mdbusybox_make() {
+	local info="make md busybox"
+	local err=0
+
+	./autelan.private
+
+	pushd ${hisitopdir}/histb
+		cp -f ${hisitopdir}/sdk_changes/rootfs/Makefile ${hisitopdir}/histb/source/rootfs/Makefile
+		make rootfs_clean
+		
+		rm -fr ${hisitopdir}/histb/source/rootfs/pub/rootfs/*
+
+		cp -f ${hisitopdir}/sdk_changes/rootfs/Makefile.busybox ${hisitopdir}/histb/source/rootfs/Makefile
+		make rootfs
+	popd
+
+	if [ "0" == "${err}" ]; then
+		echo "OK:${info}"
+	else
+		echo "ERROR[${err}]:${info}"
+		exit 1
+	fi
+}
+
 #
 #$1:version
 #

@@ -43,8 +43,10 @@ install_busybox0() {
 	local dir_busybox_1=${dir_busybox_0}/gcc4.4
 	local dir_changes=${hisitopdir}/capp/busybox2
 
-	cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
-	cp -f ${dir_changes}/Makefile.1 ${dir_busybox_1}/Makefile
+	if [[ -d ${dir_changes} ]]; then
+		cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
+		cp -f ${dir_changes}/Makefile.1 ${dir_busybox_1}/Makefile
+	fi
 }
 
 install_busybox() {
@@ -55,21 +57,24 @@ install_busybox() {
 
         install_capp ${dir_busybox}/capp
 
-	cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
-	cp -f ${dir_changes}/Makefile.1 ${dir_busybox_1}/Makefile
-	cp -f ${dir_changes}/Makefile  ${dir_busybox}/
-        cp -f ${dir_changes}/Makefile.flags  ${dir_busybox}/
-        cp -f ${dir_changes}/Config.in ${dir_busybox}/
-        cp -f ${dir_changes}/arm-hisiv200-linux.config ${dir_busybox_1}/busybox-1.16.1.config/
-	cp -fpR ${dir_changes}/networking/* ${dir_busybox}/networking/
-	cp -fpR ${dir_changes}/include/* ${dir_busybox}/include/
-        cp -fpR ${dir_changes}/init/* ${dir_busybox}/init/
-	cp -fpR ${dir_changes}/capp/* ${dir_busybox}/capp/
+	if [[ -d ${dir_changes} ]]; then
+		cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
+		cp -f ${dir_changes}/Makefile.1 ${dir_busybox_1}/Makefile
+		cp -f ${dir_changes}/Makefile  ${dir_busybox}/
+        	cp -f ${dir_changes}/Makefile.flags  ${dir_busybox}/
+        	cp -f ${dir_changes}/Config.in ${dir_busybox}/
+        	cp -f ${dir_changes}/arm-hisiv200-linux.config ${dir_busybox_1}/busybox-1.16.1.config/
+		cp -fpR ${dir_changes}/networking/* ${dir_busybox}/networking/
+		cp -fpR ${dir_changes}/include/* ${dir_busybox}/include/
+        	cp -fpR ${dir_changes}/init/* ${dir_busybox}/init/
+		cp -fpR ${dir_changes}/capp/* ${dir_busybox}/capp/
+	fi
 
 	echo "copy busybox ok"
 }
 
 install_rootfs() {
+	cp -f ${dir_sdk_changes}/rootfs/Makefile.rootfs ${dir_histb}/source/rootfs/Makefile
 	cp -f ${dir_sdk_changes}/rootfs/top/Makefile ${dir_histb}/source/rootfs/top/
         cp -f ${dir_sdk_changes}/rootfs/e2fsprogs/Makefile ${dir_histb}/source/rootfs/e2fsprogs/
 
@@ -95,7 +100,7 @@ main() {
 	capp_git_pull
 
 	case ${obj} in
-	makefile|boot|kernel|busybox|rootfs|sample|scripts)
+	makefile|boot|kernel|rootfs|sample|scripts|busybox)
 		install_${obj}
 		;;
 	*)
