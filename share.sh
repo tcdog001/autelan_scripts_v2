@@ -16,7 +16,7 @@ md_install() {
 
 ap_install() {
 	local src=../custom
-	local dst=../ap_project/qsdk/package/autelan-shell/src/jsock/etc
+	local dst=../ap_project/package/autelan-shell/src/jsock/etc
  
 	rm -fr ${dst}/jsock
 	rm -fr ${dst}/utils
