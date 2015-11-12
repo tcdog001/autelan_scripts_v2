@@ -154,7 +154,7 @@ __make_obj() {
         fi
 }
 
-file_make_lock=/tmp/.$(whoami).ltefi2.lock
+file_make_lock=/tmp/.$(whoami)${hisitopdir//\//.}.lock
 
 #
 #$1:version
@@ -169,6 +169,7 @@ make_obj() {
                 return 1
         }
 
+	echo "use lockfile ${file_make_lock}"
 	exec_with_flock ${file_make_lock} __make_obj "$@" 
 	rm -f ${hisitopdir}/version
 

@@ -3,5 +3,6 @@
 ###############
 /mdboard/
 .user
+.user.bak
 *.log
 
