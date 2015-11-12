@@ -11,7 +11,7 @@ ap_make() {
 	local version=$1
         local info="make ap version:${version}"
         local err=0;
-	local dir_ap=${hisitopdir}/ap_project
+	local dir_ap=${hisitopdir}/ap_project/qsdk
 	local dir_target
 
         echo "${info} ..."
