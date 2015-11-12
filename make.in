@@ -17,10 +17,10 @@ ap_make() {
         echo "${info} ..."
 	./share.sh ap
 
-	autelan_git_pull
+	capp_git_pull
 
 	dir_target=${dir_ap}/package/capp
-	install_autelan ${dir_target}
+	install_capp ${dir_target}
 	cp ${dir_target}/openwrt.mk ${dir_target}/Makefile
 
 	pushd ${dir_ap}

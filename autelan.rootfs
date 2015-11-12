@@ -15,8 +15,9 @@ do_install() {
 	rm -f ${hisirootfs}/usr/bin/du
 	rm -f ${hisirootfs}/bin/date
 
-	CP ../release/* ${hisirootfs}
-	CP ../custom/* ${hisirootfs}
+	CP ${hisitopdir}/release/* ${hisirootfs}
+	CP ${hisitopdir}/release/image/fastboot-burn.bin ${hisitopdir}/histb/pub/image
+	CP ${hisitopdir}/custom/* ${hisirootfs}
 
 	rm -fr ${hisitopdir}/histb/pub/rootfs_data/*
 	CP ../rootfs_data/* ${hisitopdir}/histb/pub/rootfs_data

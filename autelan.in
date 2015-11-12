@@ -235,20 +235,24 @@ git_pull() {
 	popd
 }
 
-autelan_git_pull() {
+capp_git_pull() {
 	local dir_capp=${hisitopdir}/capp
 	
-	git_pull ${dir_capp} https://github.com/smallcapp/capp 
+	if [[ -d ${dir_capp} ]]; then
+		git_pull ${dir_capp} https://github.com/smallcapp/capp 
+	fi
 }
 
-install_autelan() {
+install_capp() {
         local dst="$1"
         local dir_capp=${hisitopdir}/capp
 
-        rm -fr ${dst}/*
-        mkdir -p ${dst}
-        cp -fpR ${dir_capp}/* ${dst}/
-	
-	echo "install capp to ${dst}"
+	if [[ -d ${dir_capp} ]]; then
+		rm -fr ${dst}/*
+       		mkdir -p ${dst}
+       		cp -fpR ${dir_capp}/* ${dst}/
+
+		echo "install capp to ${dst}"
+	fi
 }
 

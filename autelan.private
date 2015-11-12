@@ -15,12 +15,12 @@ install_makefile() {
 }
 
 install_boot() {
-        local dir_autelan=${dir_histb}/source/boot/fastboot/common/autelan
+        local dir_capp=${dir_histb}/source/boot/fastboot/common/capp
 
 	cp -fpR ${dir_sdk_changes}/boot/* ${dir_histb}/source/boot/
 
-	mkdir -p ${dir_autelan}
-        install_autelan ${dir_autelan}
+	mkdir -p ${dir_capp}
+        install_capp ${dir_capp}
 
 	echo "copy boot ok"
 }
@@ -53,7 +53,7 @@ install_busybox() {
         local dir_busybox=${dir_busybox_1}/tmp/busybox-1.16.1
         local dir_changes=${hisitopdir}/capp/busybox2
 
-        install_autelan ${dir_busybox}/autelan 
+        install_capp ${dir_busybox}/capp
 
 	cp -f ${dir_changes}/Makefile.0 ${dir_busybox_0}/Makefile
 	cp -f ${dir_changes}/Makefile.1 ${dir_busybox_1}/Makefile
@@ -64,7 +64,7 @@ install_busybox() {
 	cp -fpR ${dir_changes}/networking/* ${dir_busybox}/networking/
 	cp -fpR ${dir_changes}/include/* ${dir_busybox}/include/
         cp -fpR ${dir_changes}/init/* ${dir_busybox}/init/
-	cp -fpR ${dir_changes}/autelan/* ${dir_busybox}/autelan/
+	cp -fpR ${dir_changes}/capp/* ${dir_busybox}/capp/
 
 	echo "copy busybox ok"
 }
@@ -92,7 +92,7 @@ main() {
 	local obj="$1"
 	local objs="makefile boot kernel rootfs sample scripts busybox0"
 	local object
-	autelan_git_pull
+	capp_git_pull
 
 	case ${obj} in
 	makefile|boot|kernel|busybox|rootfs|sample|scripts)
