@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./.makemdboot
+./.makemdbusybox
+cd ../release; git commit -a -m "." && git push; cd -
+
