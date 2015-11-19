@@ -106,6 +106,7 @@ __md_make() {
 md_make() {
 	local version=$1
 
+	./pullall.sh
 	./autelan.private
 
 	if [[ ! -f ${hisitopdir}/histb/pub/include/hi_unf_wdg.h ]]; then
