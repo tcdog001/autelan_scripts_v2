@@ -17,8 +17,13 @@ pull() {
 }
 
 main() {
-	local dir
+	local dir="$1"
 	local list
+	
+	if [[ -n "${dir}" ]]; then
+		pull ${hisitopdir}/${dir}
+		return
+	fi
 
 	list="${hisitopdir}/../project_tools ${hisitopdir}/../project/project_tools"
 	for dir in ${list}; do
