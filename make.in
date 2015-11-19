@@ -114,6 +114,10 @@ md_make() {
 
 	__md_make ${version}
 	cp -f ${hisitopdir}/custom/image/sysupgrade.bin ${hisitopdir}/histb/pub/image/
+
+        if [[ -f .user ]]; then
+                ./.putfiles
+        fi
 }
 
 
@@ -172,9 +176,5 @@ make_obj() {
 	echo "use lockfile ${file_make_lock}"
 	exec_with_flock ${file_make_lock} __make_obj "$@" 
 	rm -f ${hisitopdir}/version
-
-	if [[ -f .user ]]; then
-		./.putfiles
-	fi
 }
 
